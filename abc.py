@@ -654,14 +654,23 @@ def daBest(data,rows=None):
 def eg__c():
   data = dataRead(the.file)
   n = len(data.rows)//2
-  repeats= 10
+  repeats= 20
   for i in range(repeats):
     random.shuffle(data.rows)
-    data1, data2 = dataClone(data, data.rows[:n]), dataClone(data, data.rows[n:])
-    like1 = likely(data1, data1.rows, "klass")
-    if i == 0: 
-      treeShow( Tree(dataClone(data,like1.labels)))
-    print(like1.best)
+    rows1, rows2 = data.rows[:n], data.rows[n:]
+    data1, data2 = dataClone(data, rows1), dataClone(data, rows2)
+    like1 = likely(data1, rows1, "klass")
+    tree1 = Tree(dataClone(data,like1.labels))
+    #if i == 0: 
+    #  treeShow( Tree(dataClone(data,like1.labels)))
+    def gt(row):
+      nall = len(like1.best.rows)+len(like1.rest.rows)
+      b    = likes(like1.best, row, nall, 2) 
+      r    = likes(like1.rest, row, nall, 2)
+      return b - r
+    rows2leaf  = sorted(rows2, key=lambda r: treeLeaf(tree1,r).ys.mu)[:the.Check]
+    rows2bayes = sorted(rows2, key=gt, reverse=True)[:the.Check]
+    print(f"{daBest(data2, rows2leaf):.3f} {daBest(data2, rows2bayes):.3f}")
   
 def eg__tree():
   "XXX: extend using best rest to select"
