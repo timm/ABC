@@ -71,5 +71,8 @@ if [[ $- == *i* ]]; then
             ${bold}${col1}there is no escape... from shell !!${col0}
 
 EOF
+echo "${col2}"
+alias
+echo "${col0}"
 fi
 
