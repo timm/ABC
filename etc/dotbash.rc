@@ -61,6 +61,7 @@ if [[ $- == *i* ]]; then
   col0=$(tput sgr0)
   col1=$(tput setaf 6)  # cyan
   col2=$(tput setaf 5)  # magenta
+  col3=$(tput setaf 3)  
   cat <<EOF
     
      ${bold}.-.
@@ -71,7 +72,7 @@ if [[ $- == *i* ]]; then
             ${bold}${col1}there is no escape... from shell !!${col0}
 
 EOF
-echo "${col2}"
+echo "${col3}"
 alias
 echo "${col0}"
 fi

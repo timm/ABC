@@ -254,7 +254,7 @@ def likeClassifier(file, wait=5):
 #   (_|  (_  (_|  |_|  |  |   (/_ 
 #              |                  
 
-def acquire(data, rows, acq=None):
+def likely(data, rows, acq=None):
   acq = acq or the.acq
   nolabels = rows[:]; random.shuffle(nolabels)
   n1, n2 = round(the.Any**0.5), the.Any
@@ -266,10 +266,10 @@ def acquire(data, rows, acq=None):
 
   while len(nolabels) > 2 and len(labels.rows) < the.Build:
     if acq == "klass":
-      good, nolabels = acquirePickKlass(best, rest, labels, nolabels)
+      good, nolabels = likelyPickKlass(best, rest, labels, nolabels)
     else:
-      acqFun = acquireScore(acq, best, rest, labels)
-      good, nolabels = acquirePick(acqFun, nolabels)
+      acqFun = likelyScore(acq, best, rest, labels)
+      good, nolabels = likelyPick(acqFun, nolabels)
 
     dataAdd(labels, dataAdd(best, good))
     while len(best.rows) >= len(labels.rows)**0.5:
@@ -279,7 +279,7 @@ def acquire(data, rows, acq=None):
   labels.rows.sort(key=lambda r: disty(labels, r))
   return o(labels=labels.rows,best=best,rest=rest,nolabels=nolabels)
 
-def acquireScore(acq, best, rest, labels):
+def likelyScore(acq, best, rest, labels):
   n = len(labels.rows)
   def _score(row):
     b, r = likes(best, row, 2, n), likes(rest, row, 2, n)
@@ -290,13 +290,13 @@ def acquireScore(acq, best, rest, labels):
     return (b + r*q) / abs(b*q - r + 1e-32)
   return _score
 
-def acquirePick(acqFun, nolabels):
+def likelyPick(acqFun, nolabels):
   scored = sorted(nolabels[:the.Few*2], key=acqFun, reverse=True)
   good, *nogood = scored
   nolabels= nogood[:the.Few] + nolabels[the.Few*2:] + nogood[the.Few:]
   return good, nolabels
 
-def acquirePickKlass(best, rest, labels, nolabels):
+def likelyPickKlass(best, rest, labels, nolabels):
   random.shuffle(nolabels)
   good, *nolabels = nolabels
   for i, row in enumerate(nolabels[:the.Few*2]):
@@ -651,18 +651,30 @@ def daBest(data,rows=None):
   Y=lambda r: disty(data,r)
   return Y(sorted(rows, key=Y)[0])
 
+def eg__c():
+  data = dataRead(the.file)
+  n = len(data.rows)//2
+  repeats= 10
+  for i in range(repeats):
+    random.shuffle(data.rows)
+    data1, data2 = dataClone(data, data.rows[:n]), dataClone(data, data.rows[n:])
+    like1 = likely(data1, data1.rows, "klass")
+    if i == 0: 
+      treeShow( Tree(dataClone(data,like1.labels)))
+    print(like1.best)
+  
 def eg__tree():
   "XXX: extend using best rest to select"
   data = dataRead(the.file)
   n = len(data.rows)//2
   repeats= 10
   for i in range(repeats):
-    if i==0: treeShow(Tree(dataClone(data, acquire(data,data.rows,"klass").labels)))
+    if i==0: treeShow(Tree(dataClone(data, likely(data,data.rows,"klass").labels)))
     random.shuffle(data.rows)
     train, test = dataClone(data, data.rows[:n]), dataClone(data, data.rows[n:])
 
     rx0   = random.choices(test.rows,k=the.Check)
-    tree  = Tree(dataClone(data, acquire(train,train.rows,"klass").labels))
+    tree  = Tree(dataClone(data, likely(train,train.rows,"klass").labels))
     tree1 = Tree(dataClone(data, random.choices(train.rows,k=the.Build*10)))
     rx    = sorted(test.rows, key=lambda r: treeLeaf(tree,r).ys.mu)
     rx1   = sorted(test.rows, key=lambda r: treeLeaf(tree1,r).ys.mu)
@@ -692,14 +704,13 @@ def eg__acq():
     print(few)
     for acq in ["klass"]: #["xplore", "xploit", "adapt","klass"]:
       the.acq = acq
-      n=adds(daBest(data, acquire(data, data.rows).labels) for _ in range(20))
-      print("\t",the.acq, base.mu, base.lo, n.mu,n.sd)
+      n=adds(daBest(data, likely(data, data.rows).labels) for _ in range(20))
+      print(f"\t {the.acq} {base.mu:.3f}, {base.lo:.3f} {n.mu:.3f} {n.sd:.3f}")
 
 def eg__rand():
   data = dataRead(the.file)
   n = adds(daBest(data, random.choices(data.rows, k=the.Build)) for _ in range(20))
   print("\t",n.mu,n.sd)
-
 
 def eg__old():
   data = dataRead(the.file)
@@ -716,10 +727,10 @@ def eg__old():
 def eg__liking():
   data = dataRead(the.file)
   rxs = dict(#rand   = lambda d: random.choices(d.rows,k=the.Build),
-             klass = lambda d: acquire(d,d.rows,"klass").labels, #<== klass
-             xploit = lambda d: acquire(d,d.rows,"xploit").labels,
-             xplor = lambda d: acquire(d,d.rows,"xplor").labels, 
-           adapt  = lambda d: acquire(d,d.rows,"adapt").labels
+             klass = lambda d: likely(d,d.rows,"klass").labels, #<== klass
+             xploit = lambda d: likely(d,d.rows,"xploit").labels,
+             xplor = lambda d: likely(d,d.rows,"xplor").labels, 
+           adapt  = lambda d: likely(d,d.rows,"adapt").labels
              )
   xper1(data,rxs)
 
@@ -731,7 +742,7 @@ def eg__liking():
 def eg__final():
   data = dataRead(the.file)
   rxs = dict(rand   = lambda d: random.choices(d.rows,k=the.Build),
-             klass = lambda d: acquire(d,d.rows,"klass").labels, #<== klass
+             klass = lambda d: likely(d,d.rows,"klass").labels, #<== klass
              sway2  = lambda d: distFastermap(d, d.rows).labels.rows # <== sway2
              )
   xper1(data,rxs)
@@ -767,6 +778,13 @@ def xper1(data,rxs):
 #  (_   _|_   _.  ._  _|_  __       ._  
 #  __)   |_  (_|  |    |_      |_|  |_) 
 #                                  |   
+def cli(d):
+  "Updated d's slots from  command line."
+  for n,arg in enumerate(sys.argv):
+    for key in d:
+      if arg == "-"+key[0]: 
+        d[key] = coerce(sys.argv[n+1])
+  return d
 
 def main():
   "Update settings from CLI, run any eg functions."
@@ -775,13 +793,5 @@ def main():
     if (fn := globals().get(f"eg{arg.replace('-', '_')}")):
       random.seed(the.seed)
       fn() 
-
-def cli(d):
-  "Updated d's slots from  command line."
-  for n,arg in enumerate(sys.argv):
-    for key in d:
-      if arg == "-"+key[0]: 
-        d[key] = coerce(sys.argv[n+1])
-  return d
 
 if __name__ == "__main__": main()
