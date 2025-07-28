@@ -1,5 +1,5 @@
 ---
-title: "The ABCs of Easier AI"
+title: "The EZRs of Easier AI"
 author:  "Tim Menzies<br>timm@ieee.org"
 date: "July, 2025"
 ---
@@ -34,43 +34,43 @@ This question came up in a graduate AI class, when a student asked:
 “Maybe they don’t,” I replied. “Maybe we just have not learned how
 to ask the right questions yet.”
 
-My claim led to a dare, which led to a prototype.  ABC sorts a few
+My claim led to a dare, which led to a prototype.  EZR sorts a few
 labelled examples into “best” and “rest”. A simple Bayes classifier
-decides what to look at next (ABC always grabs the next example
+decides what to look at next (EZR always grabs the next example
 that is  most likely to be “best” and least likely to be “rest”).
-After each labeling, ABC rebuilds “best” and “rest” models, and the
-cycle repeated.  After just a few dozen labellings, ABC  builds a
+After each labeling, EZR rebuilds “best” and “rest” models, and the
+cycle repeated.  After just a few dozen labellings, EZR  builds a
 regressions tree from the labeled examples. This summarizes the
 reasoning into a clear and compact explanation.
 
-To say the least, ABC is far simpler (and orders of magnitude faster)
+To say the least, EZR is far simpler (and orders of magnitude faster)
 than alternatives like large language models, Gaussian Processes,
-or evolutionary reinforcement learning.  ABC is just 300 lines of
+or evolutionary reinforcement learning.  EZR is just 300 lines of
 Python and does not need heavy libraries like pandas or scikit-learn.
 
 But in a result supporting “less is more”, the first time we tried it,
-ABC found near-optimal car designs after labeling just 20–30 examples.
+EZR found near-optimal car designs after labeling just 20–30 examples.
 Its decision tree could explain what was happening, enabling human
-understanding and critique.  Because it's so small, ABC is well-suited
+understanding and critique.  Because it's so small, EZR is well-suited
 for teaching principles of AI and SE scripting. And because it's so
-fast to run and easy to modify, ABC is a productive tool for
+fast to run and easy to modify, EZR is a productive tool for
 state-of-the-art research.
 
-This suprising success of ABC lead to another question:
+This suprising success of EZR lead to another question:
 
-> “Was this just a fluke?  Was ABC just being tested one an  unusually
+> “Was this just a fluke?  Was EZR just being tested one an  unusually
 easy problem?”
 
 To test that, we went looking for harder problems. We gathered over
 110 real-world case studies from recent, peer-reviewed software
 engineering research—covering configuration optimization, architecture
 tuning, effort estimation, and more. Then we reran the experiment,
-at scale.  The results, shown below, demonstrated that ABC works
+at scale.  The results, shown below, demonstrated that EZR works
 remarkably well (quickly and effectively) for a broad range of
 problems taken from the SE literatures.
 
-This experience wuth ABC has  shifted our thinking. The  sucess of
-ABC  was not luck- it points to something deeper: an approach to
+This experience wuth EZR has  shifted our thinking. The  sucess of
+EZR  was not luck- it points to something deeper: an approach to
 software engineering and AI where, often, a few well-chosen examples
 outperform brute-force data collection.  For centuries, researchers
 have told us that that key variable selection, and strategic sampling
@@ -113,28 +113,28 @@ this document is about three things:
 
 Using this code and data, we ask five questions:
 
-- **RQ1: Is ABC simple?**  
+- **RQ1: Is EZR simple?**  
   Is our code base  compact and readable and suitabke for teaching and tinkering?
 
-- **RQ2: Is ABC fast?**  
+- **RQ2: Is EZR fast?**  
   Can our code complete tasks in milliseconds rather than hours?
 
-- **RQ3: Is ABC effective?**  
+- **RQ3: Is EZR effective?**  
   Can our achieve strong results after seeing only a few examples?
 
-- **RQ4: Is ABC insightful?**  
+- **RQ4: Is EZR insightful?**  
   Does our code support explainability, critique, and understanding?
 
-- **RQ5: Is ABC general?**  
+- **RQ5: Is EZR general?**  
   Does our code apply across various tasks?
 
-This last question deserves extra attention.  ABC is not a solution
+This last question deserves extra attention.  EZR is not a solution
 to everythng.  Some tasks are inherently complex and need inherently
 compex solutions.  or example, this document was written with 
 extensive editorial support by a large language model (big AI was
 used to sumamrize verbose sections into shorter and simpler segments).
 In RQ5, we describe the "BINGO" test which is a way to peek at data
-in order to decide they you need something more than just ABC.
+in order to decide they you need something more than just EZR.
 
 All the code and data used here can be accessed as fllows
 
@@ -170,92 +170,80 @@ control settings →            Energy-, time-,  cpu-
 Any number of AI tools could learn what separates “best”
 from “rest.” But here's the challenge: **labeling** each
 configuration (e.g., by running all the benchmarks for all possible configurations)
-is expensive. So the ABC challenge is how to
+is expensive. So the EZR challenge is how to
 learn an effective model with
 minimal effort?
 
-That’s where ABC comes in. We call it that since it uses a minimalist A–B–C strategy:
+That’s where EZR comes in. We call it that since it uses a minimalist A–B–C strategy:
 
-- **A: Ask anything**
+- **A=Any**; i.e. "ask anything".
   Randomly label a few examples (say, _A = 4_) to seed the process.
 
-- **B: Build a model**
-  Build contrastive models for “best” and “rest,” then label up to,
+- **B=Build**; i.e.  build a model**
+  In this phase, we build contrastive models for “best” and “rest,” then label up to,
   say _B = 24_ more rows by picking the unlabelled row that maximizes
   the score _b/r_ (where `b` and `r` are likelihoods that a row
   belongs to the "best" and "rest" models).
 
-- **C: Check the model**
+- **C=Check**; i.e. check the model.
   Apply the learned model to unlabeled data and to select a small
   set (e.g., _C=5_) of the most promising rows. After labelling
   those rows, return the best one.
 
-In this task, after labeling just 24 out of 800 rows (∼3%), ABC
-constructs a bibary regression tree from those 24 examples. In that
+In this task, after labeling just 24 out of 800 rows (∼3%), EZR
+constructs a binary regression tree from those 24 examples. In that
 tree, left and right branches go best and worse examples. The
-left-most branch of that tree is shwin here (and to get to any line
-in this tree, all the things abve it have to be true.
+left-most branch of that tree is shown here (and to get to any line
+in this tree, all the things abve it have to be true).
 
 ```
-crypt_blowfish=0
-|  memory_tables=1
-|  |  detailed_logging=1
-|  |  |  no_write_delay=0
-|  |  |  |  compressed_script=0 ==> win = 99
+if crypt_blowfish == 0
+|  if memory_tables == 1
+|  |  if detailed_logging == 1
+|  |  |  if no_write_delay == 0; <== win=98%
 ```
 
-As shown below, we score this reasoning with a number that goes
-up to 100.
-The “win=99” score (seen on the last line) means we have very nearly
-matching the globally best result, after looking at a tiny fraction
-of the available data. Note that this branch only mentions five
-options, and three of those are all about what to turn off. That
+These four conditions select rows that vey clone
+(98%) to  optimial
+Note that this branch only mentions four
+options, and two of those are all about what to turn off. That
 is to say, even though this databased has dozens of configuration
-options, there are three bad things to avoid and only two most
+options, there are two bad things to avoid and only two most
 important thing to enable  (_memory\_tables_ and _detailed\_logging_).
-to a method for creating a hashed representation of a password using
-an algorithm based on the Blowfish cipher.
 
-In our experience, if you ever show a result like this to a subject
+Of course, if you ever show a result like this to a subject
 matter expert, they will  push back. For example, they might demand
-to know what happems when `crypt_blowfish` is enabled. Blowfish in
+to know what happens when `crypt_blowfish` is enabled. Blowfish in
 password hashing scheme.  It makes password protection slower but
 it also  increases the computational effort required for attackers
 to  brute-force attack the database's security.  The full tree
-generted by ABC shows what happens this feature is enabled. Note
+generted by EZR shows what happens this feature is enabled.
+(see the last two lines).
+Note
 all the negative "wins" which is to say, if your goals are fast
 runtimes, do not `crypt_blowfish`.
 
 
 ```
-|  memory_tables=1
-|  |  detailed_logging=1
-|  |  |  no_write_delay=0
-|  |  |  |  compressed_script=0; ==> win = 99
-|  |  |  |  compressed_script=1; ==> win = 96
-|  |  detailed_logging=0;        ==> win = 85
-|  memory_tables=0
-|  |  encryption=0
-|  |  |  no_write_delay=0;       ==> win = 53
-|  |  |  no_write_delay=1
-|  |  |  |  txc_mvlocks=0
-|  |  |  |  |  logging=0;        ==> win = 51
-|  |  |  |  |  logging=1;        ==> win = 49
-|  |  encryption=1
-|  |  |  txc_mvlocks=0;          ==> win = 51
-crypt_blowfish=1
-|  memory_tables=1
-|  |  logging=1;                 ==> win = -47
-|  |  logging=0;                 ==> win = =54
-|  memory_tables=0
-|  |  txc_mvlocks=0;             ==> win = -304
+ #rows  win
+    17   68    if crypt_blowfish == 0
+     7   94    |  if memory_tables == 1
+     5   97    |  |  if detailed_logging == 1
+     4   98    |  |  |  if no_write_delay == 0;
+    10   49    |  if memory_tables == 0
+     7   51    |  |  if encryption == 0
+     5   50    |  |  |  if no_write_delay == 1
+     4   50    |  |  |  |  if txc_mvlocks == 0;
+     7 -165    if crypt_blowfish == 1
+     4  -51    |  if memory_tables == 1;
 ```
 
 (Aside: of course if security is an important goal then (a) add a
 "security+" column to the training data shown above; (b)  re-un
-ABC; (c) check what are the mpracts of that additional goal.)
+EZR; (c) check what are the mpracts of that additional goal.)
 
-ABC shows that with the right strategy, a handful of examples can
+EZR shows that with the right strategy, a handful of examples 
+(in this case, 24) can
 uncover nearly all the signal.  All of this took just a few dozen
 queries—and a few hundred lines of code. It’s a striking illustration
 of the Pareto principle:  **most of the value often comes from just
@@ -277,20 +265,20 @@ Well, labeling is costly:
 - Human evaluation is slow, expensive, and error-prone.
 
 Prior work has shown that even with big compute, building labeled
-datasets takes **months or years**. ABC sidesteps this by labeling
+datasets takes **months or years**. EZR sidesteps this by labeling
 only what matters most.
 
 
-### So how does ABC help?
+### So how does EZR help?
 
-ABC operates under a **tiny-AI assumption**: most of the signal is
+EZR operates under a **tiny-AI assumption**: most of the signal is
 buried under a layer of irrelevant or redundant data. It was inspred
 byt George Kelly's Personal Construct Theory (from the 1950s) that
 stressed the value of contrast set learning to  recognize what is
 different between concepts.
 
 Modern versions of contrast set learning include various rule-based
-learners including our own previous work on TAR3 and WHICH. ABC's
+learners including our own previous work on TAR3 and WHICH. EZR's
 variant on contrast set learning throws away most of that architecture
 and repalces it with a simple two-class classification approach.
 Tables of data describing the "best" and "rest" examples can compute
@@ -298,15 +286,15 @@ the likilihoods _b,r_ of of an as-yet-unclassified example belonging
 to "best" or "rest". The next example to label is the one that
 maximizes some _acquisiton function_ e.g. _b/r_.
 
-### What is New About ABC?
+### What is New About EZR?
 
 This work builds upon the foundation laid by prior resarch, but it
 removes some key barriers  that limits the practical use of thsose
 methods.
 
-Often we are asked "if ABC just' simplifies existing methods, it
+Often we are asked "if EZR just' simplifies existing methods, it
 is worthy of publciation?". If so many past resarechers have explored
-simplifty (see Table 1), what is new and itneresting about ABC?
+simplifty (see Table 1), what is new and itneresting about EZR?
 
 In reply, we say offer the observation that propr simplicity results
 are alomst uneirsally ignored.  Each year we interview dozens of
@@ -320,7 +308,7 @@ simplification research is valid resaerch.
 A persistant human congintive basi is to under-value subtractive impormvents.
 Klotz et al. report nmueris studies where
 
-case studies where hmans are given patterns on a chess baord, then asked to change the pattern in order to make it more symmetrical.
+case studis where hmans are given patterns on a chess baord, then asked to change the pattern in order to make it more symmetrical.
 OVerhwlemmning, humans prefer to add new squares to the pattern, rather than take squares away. 
 
 As Klotz et al. warns:
@@ -375,7 +363,7 @@ The database example is just one of over 100 benchmarks in the [MOOT](https://gi
 - 5 to 1,000+ configuration choices
 - Up to 3 goal metrics
 
-XXXX need to explain ABC
+XXXX need to explain EZR
 
 We tested EZR 10× on each dataset. In each trial:
 - _A = 4_, _B = 24_, _C = 5_
@@ -404,10 +392,10 @@ The results were sorted and divided into percentils (top 10%, next 10%, etc):
 |  10        |  17 | ******                    | -12        |
 
 
-Note that, one time in ten, even dumb guessing gets lucky and does  surprisingly well (the 10% case where "dumb" is 12% better than ABC).
+Note that, one time in ten, even dumb guessing gets lucky and does  surprisingly well (the 10% case where "dumb" is 12% better than EZR).
 But we do not want to be "dumb"
-since dumb reasoning does not generalize. On the other hand, **ABC’s trees provide both performance and understanding.** To say that another way,
-dumb reasonng just says yes or now. ABC tells you how and why.
+since dumb reasoning does not generalize. On the other hand, **EZR’s trees provide both performance and understanding.** To say that another way,
+dumb reasonng just says yes or now. EZR tells you how and why.
 
 ALso,  while dumb guessing is simple, EZR is barely more complex—just a few hundred lines of code—and runs fast. The full experiment (10× on 110 datasets) took just **65 seconds** on a Mac mini with no GPU.
 
@@ -437,7 +425,82 @@ EZR demonstrates how to teach and practice software engineering grounded in:
 
 [^tu20]: Tu, Huy, Zhe Yu, and Tim Menzies. "Better data labelling with emblem (and how that impacts defect prediction)." *IEEE TSE*, 48.1 (2020): 2
 
+## Data
 
+To understand the code, first we have to understand the data it processess.
+Here's a typical input file.
+Here, the  goal to is
+to tune Spout wait, Spliters, Counters in order to achieve the
+best Throughput/Latency. 
+
+
+      x = independent values          | y = dependent values
+      --------------------------------|----------------------
+      Spout_wait, Spliters, Counters, | Throughput+, Latency-
+         10,        6,       17,      |    23075,    158.68
+          8,        6,       17,      |    22887,    172.74
+          9,        6,       17,      |    22799,    156.83
+          9,        3,       17,      |    22430,    160.14
+        ...,      ...,      ...,           ...,    ...
+      10000,        1,       10,      |   460.81,    8761.6
+      10000,        1,       18,      |   402.53,    8797.5
+      10000,        1,       12,      |   365.07,    9098.9
+      10000,        1,        1,      |   310.06,    9421
+
+EZR processes tables of data with x inputs and y goals.
+
+- The first row shows the column names.
+- Numeric columns start with uppercase, all others are
+/symbolic.
+- Goal columns (e.g. Fig. 3’s Throughput+, Latency-) use
+  +/- to denote maximize and minimize.
+
+For the purposes of illustration, the rows in this table
+are
+sorted from best to worst based on those goals
+(during
+experimentation, row order should initially be randomized),
+
+For the purposes of evaluation, all rows in MOOT data sets
+contain all their y values. When evaluating the outcome of an
+optimizer, these values are used to determine how well the
+optimizer found the best rows.
+
+For the purposes of optimization experiments, researchers
+should hide the y-values from the optimizer. Each time the
+optimizer requests the value of a particular row, this “costs”
+one unit. Good optimizers find
+good goals at least cost (i.e. fewest labels).
+
+## Structs
+
+When this table is read by EZR, it is turns into a `Data`
+stuct which contains `rows`, which are sumamrized in `cols`
+(columns). Columns are either `Num`s (numeric) or `Sym` (symbolic).
+
+
+## Code
+
+The core of EZR is around 200 lines of Python. Around that core
+are hundreds of lines of other code containing a test suite,
+some statistical analysis, and a whole bunch of other methods
+that are not essential or  recommmended, but inclde here for comparisons purposes.
+
+The code inputs a csv file
+
+When reading that file, it is best to start at the top and bottom. 
+The bottom of the code contains a long ist of `eg__xxx` functions which
+can be called from the command line `python3 ezr.py --xxx`. To get a list
+of these functions, use the `--list` flag.
+
+The top of the code's
+`__docstring__`
+shows the code's options, the most important of which are the `-A`,
+`-B`, `-C` flags that control Any, Build, and Check. The rest of the flags do thigs like set the random numer seed (`-s`) and where to find input data
+(`-f`). 
+
+Python nodes
+- meta-model. Doc strings in files and functions. globals (to get list of functions).
 
 # Easer AI: Why?
 

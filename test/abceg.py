@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -B
 import sys,re
 sys.path += ["../src"]
-from abcs import *
+from abc import *
 
 def all_egs(run=False):
   "Run all eg__* functions."
