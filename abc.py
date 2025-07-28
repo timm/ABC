@@ -6,7 +6,9 @@ ezr.py, multi objective.
  -A  Any=4           on init, how many initial guesses?
  -B  Build=24        when growing theory, how many labels?
  -C  Check=5         when testing, how many checks?
+ -F  Few=128         when sub-sampling rows, how many to use?
  -k  k=1             Bayes hack for rare classes
+ -l  leaf=2          min leaf size
  -m  m=2             Bayes hack for rare attributes
  -p  p=2             distance calculation coefficient
  -s  seed=1234567890 random number seed
@@ -83,6 +85,14 @@ def add(x, v, inc=1, zap=False):
     [add(col, v[col.at],inc) for col in x.cols.all]
   return v
 
+def norm(n, v): 
+  return v if v=="?" or n.it=="Sym" else (v-n.lo)/(n.hi-n.lo + 1E-32)
+
+def div(col):
+  if col.it == "Num": return col.sd
+  N = sum(col.has.values())
+  return -sum(p*math.log(p,2) for n in col.has.values() if (p:=n/N) if n>0)
+
 #--------------------------------------------------------------
 def dist(src):
   d,n = 0,0
@@ -95,8 +105,6 @@ def disty(data, row):
 def distysort(data, rows=None):
   return sorted(rows or data.rows, key=lambda r: disty(data,r))
 
-def norm(n, v): 
-  return v if v=="?" or n.it=="Sym" else (v-n.lo)/(n.hi-n.lo + 1E-32)
 
 #--------------------------------------------------------------
 def like(col, v, prior=0):
@@ -121,7 +129,7 @@ def likely(data, rows):
   nolabels = shuffle(rows[:])
   while len(nolabels) > 2 and len(labels.rows) < the.Build:
     if len(labels.rows) <= the.Any:
-      dataAdd(labels, nolabels.pop())
+      add(labels, nolabels.pop())
 
     if len(labels.rows) == the.Any:
       labels.rows = distysort(labels)
@@ -133,11 +141,12 @@ def likely(data, rows):
       good, nolabels = likely1(best, rest,shuffle(nolabels))
       add(labels, add(best, good))
 
-    if len(best.rows) >= len(labels.rows)**0.5:
-      best.rows = distysort(best) 
+      if len(best.rows) >= len(labels.rows)**0.5:
+        best.rows = distysort(best) 
 
-    while len(best.rows) >= len(labels.rows)**0.5:
-      add(rest, sub(best, best.rows.pop(-1)))
+      while len(best.rows) >= len(labels.rows)**0.5:
+        add(rest, sub(best, best.rows.pop(-1)))
+
   return o(labels=distysort(labels), nolabels=nolabels,
            best=best, rest=rest)
 
@@ -148,10 +157,10 @@ def likely1(best, rest,  nolabels):
     if ( likes(best,row,2,nall) > likes(rest,row,2,nall) ):
       good = nolabels.pop(i); break
   return good, nolabels
-
+
 #--------------------------------------------------------------
 treeOps = {'<=' : lambda x,y: x <= y, 
-           '==' : lambda x,y:x == y, 
+           '=' : lambda x,y:x == y, 
            '>'  : lambda x,y:x > y}
 
 def treeSelects(row,op,at,y): 
@@ -183,7 +192,7 @@ def treeCuts(col, rows,  Y):
         d[x] = d.get(x) or Num()
         add(d[x], Y(row))
     return o(div = sum(c.n/n * div(c) for c in d.values()),
-             hows = [("==",col.at,x) for x in d])
+             hows = [("=",col.at,x) for x in d])
   
   def _num(num):
     out, b4, lhs, rhs = None, None, Num(), Num()
@@ -198,7 +207,7 @@ def treeCuts(col, rows,  Y):
       b4 = x
     return out
 
-  return (_sym if type(col) is Sym else _num)(col)
+  return (_sym if col.it == "Sym" else _num)(col)
 
 def treeNodes(data, lvl=0, key=None):
   "iterate over all treeNodes"
@@ -213,21 +222,23 @@ def treeLeaf(data, row):
   return data
 
 def treeShow(data, key=lambda d: d.ys.mu):
-  "Display tree"
-  print(f"{'d2h':>4} {'win':>4} {'n':>4}")
-  print(f"{'----':>4} {'----':>4} {'----':>4}")
-  s, ats = data.ys, {}
-  win = lambda x: int(100 * (1-(x-data.ys.lo) / 
-                             (data.ys.mu-data.ys.lo+1e-32)))
-  for lvl, d in treeNodes(data,key=key):
-    op, at, y = d.how if lvl else ('', '', '')
-    name = data.cols.names[at] if lvl else ''
-    expl = f"{name} {op} {y}" if lvl else ''
-    indent = '|  ' * (lvl - 1)
-    line = f"{d.ys.mu:4.2f} {win(d.ys.mu):4} {len(d.rows):4}    " \
-           f"{indent}{expl}{';' if not d.kids else ''}"
-    print(line)
-    if lvl: ats[at] = 1
+  "Display tree (structure only, no numeric summaries)"
+  ats = {}
+  print(f"({data.ys.n})")
+  for lvl, d in treeNodes(data, key=key):
+    if lvl == 0: continue
+    op, at, y = d.how
+    name = data.cols.names[at]
+    expl = f"if {name} {op} {y} :"
+    indent = '|  ' * lvl
+    if not d.kids:
+      score = int(100 * (1 - (d.ys.mu - data.ys.lo) /
+               (data.ys.mu - data.ys.lo + 1e-32)))
+      leaf = f" {score} ({d.ys.n})"
+    else:
+      leaf = ''
+    print(f"{indent}{expl}{leaf}")
+    ats[at] = 1
   used = [data.cols.names[at] for at in sorted(ats)]
   print(len(data.cols.x), len(used), ', '.join(used))
 
@@ -251,14 +262,11 @@ def all_egs(run=False):
       else:  
         print(" "+re.sub('eg__','--',k).ljust(10),"\t",fn.__doc__ or "")
 
-#  _        _.  ._ _   ._   |   _    _
-# (/_  ><  (_|  | | |  |_)  |  (/_  _> 
-#                      |               
+#--------------------------------------------------------------
 def daBest(data,rows=None):
   rows = rows or data.rows
   Y=lambda r: disty(data,r)
   return Y(sorted(rows, key=Y)[0])
-
 
 def eg_h(): 
   "Print help."
@@ -329,6 +337,13 @@ def eg__disty():
   print(', '.join(data.cols.names))
   print("top4:");   [print("\t",row) for row in data.rows[:4]]
   print("worst4:"); [print("\t",row) for row in data.rows[-4:]]
+
+def eg__tree():
+  treeShow(Tree(Data(csv(the.file))))
+
+def eg__likely():
+  data = Data(csv(the.file))
+  treeShow( Tree(dataClone(data, likely(data,data.rows).labels)))
 
 #-----------------------------------------------------------
 if __name__ == "__main__":
