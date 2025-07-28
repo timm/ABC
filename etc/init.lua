@@ -22,6 +22,8 @@ vim.opt.tabstop = 2
 vim.opt.scrolloff = 3
 vim.opt.cursorline = true
 vim.opt.hidden = true
+vim.keymap.set('n', 'Q', ':qall<CR>')
+
 
 -- Search
 vim.opt.ignorecase = true

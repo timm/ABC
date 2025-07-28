@@ -33,7 +33,7 @@ PROMPT_COMMAND='
 alias ..='cd ..'
 alias ...='cd ../../../'
 alias c='clear'
-alias q='exit'
+alias Q='exit'
 
 # Aliases: ls enhancements
 alias ls='ls -G'
@@ -50,7 +50,7 @@ alias gl='git log --oneline --graph --all --decorate'
 
 # Aliases: misc
 alias h='history'
-alias v="nvim -u '$Here/init.lua'"  # Load custom Neovim config
+alias vi="nvim -u '$Here/init.lua'"  # Load custom Neovim config
 
 # ⌨️ QoL: quick edit .dotbashrc and reload
 alias reload="source '$Here/dotbash.rc' && echo ✅ dotbash.rc reloaded"
@@ -62,15 +62,15 @@ if [[ $- == *i* ]]; then
   col1=$(tput setaf 6)  # cyan
   col2=$(tput setaf 5)  # magenta
   col3=$(tput setaf 3)  
-  cat <<EOF
-    
-     ${bold}.-.
-    (o o)  
-    | O \\
-     \\   \\
-      \`~~~'${col0}
-            ${bold}${col1}there is no escape... from shell !!${col0}
-
+   echo "${bold}${col1}"
+  cat<<'EOF'
+        ___
+      _/ ..\      There is no escape...
+     ( \  0/__      .... from sh/ell !!!
+      \    \__)
+      /     \
+jgs  /      _\
+    `"""""``
 EOF
 echo "${col3}"
 alias
