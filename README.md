@@ -16,12 +16,16 @@ _"Subtract."_ --Leidy Klotz
 
 ## Introduction
 
-Engineers do it faster, better, and cheaper. If anyone else needs
-a dollar, engineers do it for a penny.
+Engineers do more, with less.  If any fool can do it for a dollar,
+engineers do it for a penny.  Engineers build systems that work for
+others: other  teams, other toolchains, and other time zones.  Its
+about systems that can endure (not just impress) long after the
+hype fades and which are understandable and auditable,  open to
+inspection and critique and improvement by others.
 
-So why not expect the same from AI? Maybe it’s time to question the
-complexity arms race. Must every task require models with millions, or
-trillions, of variables?
+So why settle for less from AI?  Must every task use opaque models
+rented  from someone else, feed by trillions of variables, requiring
+centruies of CPU?
 
 This question came up in a graduate AI class, when a student asked:
 
@@ -30,27 +34,27 @@ This question came up in a graduate AI class, when a student asked:
 “Maybe they don’t,” I replied. “Maybe we just have not learned how
 to ask the right questions yet.”
 
-My claim led to a dare, which led to a simple prototype.  ABC labels
-a few examples (selected at random), then sorted them into “best”
-and “rest”. It then uses a simple Bayes classifier to decide what
-to label next (ABC always grabs the next example that is  most
-likely to be “best” and least likely to be “rest”). After each
-labeling, ABC rebuilds its “best” and “rest” models, and the cycle
-repeated.  Afterwards, ABC  builds a  regressions tree from the
-labeled examples. This summarizes the reasoning into a clear and
-compact explanation.
+My claim led to a dare, which led to a prototype.  ABC sorts a few
+labelled examples into “best” and “rest”. A simple Bayes classifier
+decides what to look at next (ABC always grabs the next example
+that is  most likely to be “best” and least likely to be “rest”).
+After each labeling, ABC rebuilds “best” and “rest” models, and the
+cycle repeated.  After just a few dozen labellings, ABC  builds a
+regressions tree from the labeled examples. This summarizes the
+reasoning into a clear and compact explanation.
 
 To say the least, ABC is far simpler (and orders of magnitude faster)
 than alternatives like large language models, Gaussian Processes,
 or evolutionary reinforcement learning.  ABC is just 300 lines of
 Python and does not need heavy libraries like pandas or scikit-learn.
-In a result supporting “less is more”, the first time we tried it,
+
+But in a result supporting “less is more”, the first time we tried it,
 ABC found near-optimal car designs after labeling just 20–30 examples.
 Its decision tree could explain what was happening, enabling human
 understanding and critique.  Because it's so small, ABC is well-suited
-for teaching AI and SE scripting principles. And because it's so
+for teaching principles of AI and SE scripting. And because it's so
 fast to run and easy to modify, ABC is a productive tool for
-state-of-the-art research in search-based optimization.
+state-of-the-art research.
 
 This suprising success of ABC lead to another question:
 
@@ -60,7 +64,7 @@ easy problem?”
 To test that, we went looking for harder problems. We gathered over
 110 real-world case studies from recent, peer-reviewed software
 engineering research—covering configuration optimization, architecture
-tuning, effort estimation, and more. Then we reran the experiment
+tuning, effort estimation, and more. Then we reran the experiment,
 at scale.  The results, shown below, demonstrated that ABC works
 remarkably well (quickly and effectively) for a broad range of
 problems taken from the SE literatures.
@@ -75,9 +79,9 @@ can solve complex problems efficiently (see Table 1).
 Yet despite this legacy of elegant minimalism, today’s trends often
 favor the opposite: ever-larger models, more data, and growing
 complexity. There are many reasons for this[^subtract], but a major
-one is inertia—we tend to add rather than subtract, mistaking bloat
+one is inertia: we tend to add rather than subtract, mistaking bloat
 for progress. Complex products impress the marketplace and so can
-drive sales (even if, later,   that drives up maintainance costs).
+drive sales (even if, later,   that also drives up maintainance costs).
 
 | Year     | What                     | Who / System         | Notes                                                                                   |
 |----------|--------------------------|-----------------------|-----------------------------------------------------------------------------------------|

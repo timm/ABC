@@ -28,6 +28,16 @@ lint: ## lint all python in this directory
 		    --disable=C0410,C0115,C3001,R0903,E1101 \
 		    --disable=E701,W0108,W0106,W0718,W0201  *.py
 
+docs/%.html : %.md
+	gawk -f $(Top)/etc/prep.awk $^  | pandoc  \
+	  --from markdown       \
+	  --to html              \
+	  --highlight-style=tango  \
+	  --standalone              \
+	  -o $@ 
+	sed -i ''  's?<.style>? pre {font-size: x-small;} </style>?' $@
+	open $@
+
 ~/tmp/%.pdf: %.py ## pdf print Python
 	echo "making $@"
 	a2ps                     \
