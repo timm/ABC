@@ -139,28 +139,28 @@ def likes(data, row, nall=100, nh=2):
 def likely(data,rows=None):
   rows = rows or data.rows
   no   = clone(data, shuffle(rows[:]))
-  yes  = clone(data)
+  yes, best, rest = clone(data), clone(data), clone(data)
   while no.n > 2 and yes.n < the.Build:
     if yes.n <= the.Any: 
       add(yes, sub(no, no.rows.pop()))
     if yes.n == the.Any:
       yes.rows = distysort(yes)
-      n    = round(the.Any**.5)
-      best = clone(data, yes.rows[:n])
-      rest = clone(data, yes.rows[n:])
+      n = round(the.Any**.5)
+      adds(yes.rows[:n], best)
+      adds(yes.rows[n:], rest)
     if yes.n > the.Any:
-      add(yes, add(best, likely1(best, rest, no)))
-      if best.n > yes.n**.5:
+      add(yes, add(best, likelyBest(best, rest, no)))
+      if best.n > (yes.n**.5):
         best.rows = distysort(yes,best.rows)
-        while best.n > yes.n**.5:
+        while best.n > (yes.n**.5):
           add(rest, sub(best, best.rows.pop(-1)))
   return distysort(yes)
  
-def likely1(best,rest,no):
+def likelyBest(best,rest,no):
   shuffle(no.rows)
   j, nall = 0, best.n + rest.n
   for i,row in enumerate(no.rows[:the.Few*2]):
-    if likes(best,row,2,nall) > likes(rest,row,2,nall):
+    if likes(best,row,nall,2) > likes(rest,row,nall,2):
       j = i; break
   return sub(no, no.rows.pop(j))
 
@@ -213,7 +213,7 @@ def eg__likely():
   data = Data(csv(the.file))
   b4   = adds(disty(data,r) for r in data.rows)
   win  = lambda n: int(100*(1 - (n - b4.lo) / (b4.mu - b4.lo)))
-  now  = adds(disty(data, likely(data)[0]) for _ in range(2))
+  now  = adds(disty(data, likely(data)[0]) for _ in range(1))
   print(out(win(now.mu)), re.sub(r".*/","",the.file))
 
 def eg__all(): 

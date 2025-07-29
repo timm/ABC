@@ -54,3 +54,8 @@ docs/%.html : %.md
 	-M letter                           \
 	-o - $^ | ps2pdf - $@
 	open $@
+
+#------------------------------
+
+lite1:
+	for f in ../moot/optimize/*/*.csv; do (python3 -B lite.py -f $$f --likely &); done | tee ~/tmp/$@
