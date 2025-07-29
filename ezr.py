@@ -761,7 +761,7 @@ def eg__klass():
   print(1)
   data = Data(csv(the.file))
   base = adds(disty(data,r) for r in data.rows)
-  for few in [15,30,60]:
+  for few in [128]: #15,30,60]:
     the.Few = few
     print(few)
     for acq in ["klass"]: #["xplore", "xploit", "adapt","klass"]:
