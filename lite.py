@@ -91,9 +91,8 @@ def dist(src):
 def disty(data, row):
   return dist(abs(norm(c, row[c.at]) - c.more) for c in data.cols.y)
 
-def distysort(data):
-  data.rows.sort(key=lambda r: disty(data,r))
-  return data.rows
+def distysort(data,rows=None):
+  return sorted(rows or data.rows, key=lambda r: disty(data,r))
 
 def norm(i, v): 
   return v if v=="?" or i.it is Sym else (v-i.lo)/(i.hi-i.lo + 1E-32)
@@ -145,14 +144,14 @@ def likely(data,rows=None):
     if yes.n <= the.Any: 
       add(yes, sub(no, no.rows.pop()))
     if yes.n == the.Any:
-      distysort(yes)
+      yes.rows = distysort(yes)
       n    = round(the.Any**.5)
       best = clone(data, yes.rows[:n])
       rest = clone(data, yes.rows[n:])
     if yes.n > the.Any:
       add(yes, add(best, likely1(best, rest, no)))
       if best.n > yes.n**.5:
-        distysort(best)
+        best.rows = distysort(yes,best.rows)
         while best.n > yes.n**.5:
           add(rest, sub(best, best.rows.pop(-1)))
   return distysort(yes)
@@ -214,8 +213,8 @@ def eg__likely():
   data = Data(csv(the.file))
   b4   = adds(disty(data,r) for r in data.rows)
   win  = lambda n: int(100*(1 - (n - b4.lo) / (b4.mu - b4.lo)))
-  now  = adds(win(disty(data, likely(data)[0])) for _ in range(20))
-  print(out(o(mu= now.mu, sd=now.sd)), re.sub(r".*/","",the.file))
+  now  = adds(disty(data, likely(data)[0]) for _ in range(2))
+  print(out(win(now.mu)), re.sub(r".*/","",the.file))
 
 def eg__all(): 
  for s,fn in globals().items():
