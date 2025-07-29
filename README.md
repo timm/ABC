@@ -491,7 +491,41 @@ The code inputs a csv file
 When reading that file, it is best to start at the top and bottom. 
 The bottom of the code contains a long ist of `eg__xxx` functions which
 can be called from the command line `python3 ezr.py --xxx`. To get a list
-of these functions, use the `--list` flag.
+of these functions, use the `--list` flag. The functions are listed
+top to bottom, simplest to most complex.
+
+```
+> ezr --list
+
+ezr.py [OPTIONS]
+
+   --list        List all examples
+   --the         Show the system config.
+   --sym         Sym: demo.
+   --Sym         Sym: demo of likelihood.
+   --num         Num: demo.
+   --Num         Num: demo of likelihood.
+   --data        Data: demo of reading from file.
+   --inc         Data: updates. Incremental adds and deletes.
+   --bayes       Like: find likelihoods for all rows.
+   --stats       Stats: numeric (effect size and significance tests).
+   --sk20        Stats: Checking rankings of 20 treatmeents, for increaseing sd
+   --confuse     Stats: discrete calcs for recall, precision etc..
+   --diabetes    Naive Bayes classifier: test on diabetes.
+   --soybean     Naive Bayes classifier: test on soybean.
+   --distx       Dist: check x distance calcs.
+   --disty       Dist: check y distance calcs.
+   --irisKpp     Dist: check Kmeans++ centroids on iris.
+   --irisK       Dist: check Kmeans on iris.
+   --fmap        Dist:  diversity-based optimziation with fast map.
+   --rand        Dist:  diversity-based optimziation with random point selection.
+   --c           ABC: compare tree and bayes for exploring test data.
+   --tree        ABC: Test the tree on test data.
+   --klass       ABC: acquire using 'klass'.
+   --old         ABC: compare diversity acquisition strategies.
+   --liking      ABC: compare Bayesian acquisition strategies.
+   --final       ABC: ompare the better acquisition strategies.
+```
 
 The top of the code's
 `__docstring__`

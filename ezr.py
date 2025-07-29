@@ -30,8 +30,18 @@ ezr.py, multi objective.
  --X                 run example X
  --all               run all examples
 """
-from types import SimpleNamespace as o 
 import random, math, sys, re
+
+class o:
+  "Class with (a) easy init and (b) pretty print."
+  def __init__(i, **d): return i.__dict__.update(**d)
+  def __repr__(i):
+    def out(x):
+      if callable(x) : return x.__name__
+      if type(x) is float : return int(x) if int(x)==float(x) else f"{x:.3f}"
+      return x
+    return "{"+' '.join(f":{k} {out(v)}" 
+                        for k,v in i.__dict__.items() if str(k)[0] != "_")+"}"
 
 def coerce(s):
   "String to atom."
@@ -41,38 +51,32 @@ def coerce(s):
   s = s.strip()
   return {'True':True,'False':False}.get(s,s)
 
-# help --> config 
 the = o(**{k:coerce(v) for k,v in re.findall(r"(\w+)=(\S+)",__doc__)})
 
 #  _  _|_  ._        _  _|_   _ 
 # _>   |_  |   |_|  (_   |_  _> 
 
-Sym = dict
-def Num(): return o(lo=1e32, mu=0, m2=0, sd=0, n=0, hi=-1e32, heaven=1)
+def Sym(at=0, txt=""): 
+  return o(it=Sym, at=at,txt=txt,has={})
+
+def Num(at=0, txt=" "): 
+  return o(it=Num, at=at, txt=txt, lo=1e32, 
+           mu=0, m2=0, sd=0, n=0, hi=-1e32, 
+           more = 0 if txt[-1] == "-" else 1)
 
 def Data(src):
   "Store rows, and summarizes then in cols."
-  def _cols(names):
-    cols = o(names=names, all=[], x={}, y={}, klass=None)
-    for c,s in enumerate(names):
-      cols.all += [Num() if s[0].isupper() else Sym()]
-      if s[-1] != "X":
-        if s[-1] == "!": cols.klass=c
-        if s[-1] == "-": cols.all[-1].heaven = 0
-        (cols.y if s[-1] in "!-+" else cols.x)[c] = cols.all[-1]
-    return cols
-
   src = iter(src)
-  data = o(rows=[], cols= _cols(next(src)))
-  [dataAdd(data,r) for r in src]
-  return data 
+  return adds(src, o(it=Data, rows=[], cols= Cols(next(src))))
 
-def dataAdd(data, row, inc=1, zap=False):
-  "Update data with a row (and to subtract, use inc= -1)."
-  if inc>0: data.rows += [row]
-  elif zap: data.rows.remove(row) # slow for long rows
-  for c,col in enumerate(data.cols.all): add(col,row[c],inc)
-  return row
+def Cols(names):
+  all, x, y, klass = [],[],[],None
+  for c,s in enumerate(names):
+    all += [(Num if s[0].isupper() else Sym)(c,s)]
+    if s[-1] == "X": continue
+    if s[-1] == "!": klass = all[-1]
+    (y if s[-1] in "!-+" else x).append( all[-1] )
+  return o(it=Cols, names=names, all=all, x=x, y=y, klass=klass)
 
 def dataClone(data,rows=[]): 
   "Mimic the structure of an existing data."
@@ -81,28 +85,33 @@ def dataClone(data,rows=[]):
 def dataRead(file):
   "Load a csv file into a data."
   data = None
+
+def csv(file):
   with open(file,encoding="utf-8") as f:
     for line in f:
       if (line := line.split("%")[0]):
-        row= [coerce(val.strip()) for val in line.split(",")]
-        if data: dataAdd(data,row)
-        else: data = data or Data([row])
-  return data
+        yield [coerce(s.strip()) for s in line.split(",")]
 
-def  add(col, v, inc=1):
-  "Update a col with a value (and to subtract, use inc= -1)."
+def sub(x, v, zap=False): return add(x,v,-1,zap)
+
+def add(x, v, inc=1, zap=False):
+  "Update a x with a value (and to subtract, use inc= -1)."
   if v != "?":
-    if type(col) is Sym: col[v] = inc + col.get(v,0)
+    if   x.it is Sym: x.has[v] = inc + x.has.get(v,0)
+    elif x.it is Data:
+      if inc > 0: x.rows += [v]
+      elif zap: x.rows.remove(v) # slow for long rows
+      for col in x.cols.all: add(col, v[col.at],inc,zap)
     else:
-      col.n += inc
-      col.lo, col.hi = min(v, col.lo), max(v, col.hi)
-      if inc < 0 and col.n < 2:
-        col.sd = col.m2 = col.mu = col.n = 0
+      x.n += inc
+      x.lo, x.hi = min(v, x.lo), max(v, x.hi)
+      if inc < 0 and x.n < 2:
+        x.sd = x.m2 = x.mu = x.n = 0
       else:
-        d       = v - col.mu
-        col.mu += inc * (d / col.n)
-        col.m2 += inc * (d * (v - col.mu))
-        col.sd  = 0 if col.n < 2 else (max(0,col.m2)/(col.n-1))**.5
+        d     = v - x.mu
+        x.mu += inc * (d / x.n)
+        x.m2 += inc * (d * (v - x.mu))
+        x.sd  = 0 if x.n < 2 else (max(0,x.m2)/(x.n-1))**.5
   return v
 
 def mids(data):
@@ -110,17 +119,17 @@ def mids(data):
   return [mid(col) for col in data.cols.all]
 
 def mid(col):
-  return max(col, key=col.get) if type(col) is Sym else col.mu
+  return max(col.has, key=col.has.get) if col.it is Sym else col.mu
 
 def div(col):
   "Return the diversity)."
-  if type(col) is not Sym: return col.sd
+  if col.it is Num: return col.sd
   N = sum(col.values())
   return -sum(n/N * math.log(n/N, 2) for n in col.values())
 
 def norm(col, v): 
   "Normalize a number 0..1 for lo..hi."
-  return v if v=="?" or type(col) is Sym else (v-col.lo)/(col.hi-col.lo + 1E-32)
+  return v if v=="?" or col.it is Sym else (v-col.lo)/(col.hi-col.lo + 1E-32)
 
 
 #   _|  o   _  _|_   _.  ._    _   _  
@@ -134,19 +143,19 @@ def dist(src):
 
 def disty(data, row):
   "Distance between goals and heaven."
-  return dist(abs(norm(col, row[c]) - col.heaven) for c,col in data.cols.y.items())
+  return dist(abs(norm(col, row[col.at]) - col.more) for col in data.cols.y)
 
 def distx(data, row1, row2):
   "Distance between independent values of two rows."
   def _aha(col, a,b):
     if a==b=="?": return 1
-    if type(col) is Sym: return a != b
+    if col.it is Sym: return a != b
     a,b = norm(col,a), norm(col,b)
     a = a if a != "?" else (0 if b>0.5 else 1)
     b = b if b != "?" else (0 if a>0.5 else 1)
     return abs(a-b)
 
-  return dist(_aha(col, row1[c], row2[c])  for c,col in data.cols.x.items())
+  return dist(_aha(col, row1[col.at], row2[col.at])  for col in data.cols.x)
 
 def distKpp(data, rows=None, k=20, few=None):
   "Return key centroids usually separated by distance D^2."
@@ -172,7 +181,7 @@ def distKmeans(data, rows=None, n=10, out=None, err=1, **key):
     col = min(centroids, key=lambda crow: distx(data,crow,row))
     err1 += distx(data,col,row) / len(rows)
     d[id(col)] = d.get(id(col)) or dataClone(data)
-    dataAdd(d[id(col)],row)
+    add(d[id(col)],row)
   print(f'err={err1:.3f}')
   return (out if (n==1 or abs(err - err1) <= 0.01) else
           distKmeans(data, rows, n-1, d.values(), err=err1,**key))
@@ -202,8 +211,8 @@ def distFastermap(data,rows, sway1=False):
   Y  = lambda r: disty(labels,r)
   while len(labels.rows) < the.Build and len(nolabel) >= 2: 
     east, *rest, west = distFastmap(data,nolabel)
-    dataAdd(labels, east)
-    dataAdd(labels, west)
+    add(labels, east)
+    add(labels, west)
     n = len(rest)//2
     nolabel = nolabel[:n] if Y(east) < Y(west) else nolabel[n:]
     if not sway1 and len(nolabel) < 2:
@@ -215,11 +224,11 @@ def distFastermap(data,rows, sway1=False):
 
 #  |  o  |    _  
 #  |  |  |<  (/_ 
-               
 def like(col, v, prior=0):
   "How much does this COL like v?"
-  if type(col) is Sym: 
-    out=(col.get(v,0) + the.m*prior)/(sum(col.values()) + the.m+1e-32)
+  if col.it is Sym: 
+    out = (  (col.has.get(v,0) + the.m*prior)
+           / (sum(col.has.values()) + the.m+1e-32))
   else:
     var= 2 * col.sd * col.sd + 1E-32
     z  = (v - col.mu) ** 2 / var
@@ -230,7 +239,7 @@ def likes(data, row, nall=100, nh=2):
   "How much does this DATA like row?"
   prior = (len(data.rows) + the.k) / (nall + the.k*nh)
   tmp = [like(col,v,prior) 
-         for c,col in data.cols.x.items() if (v:=row[c]) != "?"]
+         for col in data.cols.x if (v:=row[col.at]) != "?"]
   return sum(math.log(n) for n in tmp + [prior] if n>0)    
 
 def likeBest(datas,row, nall=None):
@@ -241,13 +250,13 @@ def likeBest(datas,row, nall=None):
 def likeClassifier(file, wait=5):
   "Classify rows by how much each class likes a row."
   cf = Confuse()
-  data = dataRead(file)
-  wait,d,key = 5,{},data.cols.klass
+  data = Data(csv(file))
+  wait,d,key = 5,{},data.cols.klass.at
   for n,row in enumerate(data.rows):
     want = row[key]
     d[want] = d.get(want) or dataClone(data)
     if n > wait: confuse(cf, want, likeBest(d,row, n-wait))
-    dataAdd(d[want], row)
+    add(d[want], row)
   return confused(cf)
 
 #    _.   _   _.       o  ._   _  
@@ -271,10 +280,10 @@ def likely(data, rows, acq=None):
       acqFun = likelyScore(acq, best, rest, labels)
       good, nolabels = likelyPick(acqFun, nolabels)
 
-    dataAdd(labels, dataAdd(best, good))
+    add(labels, add(best, good))
     while len(best.rows) >= len(labels.rows)**0.5:
       best.rows.sort(key=lambda r: disty(best, r))
-      dataAdd(rest, dataAdd(best, best.rows.pop(-1), -1))
+      add(rest, sub(best, best.rows.pop(-1)))
 
   labels.rows.sort(key=lambda r: disty(labels, r))
   return o(labels=labels.rows,best=best,rest=rest,nolabels=nolabels)
@@ -323,8 +332,8 @@ def Tree(data, Klass=Num, Y=None, how=None):
   data.kids, data.how = [], how
   data.ys = adds(Y(row) for row in data.rows)
   if len(data.rows) >= the.leaf:
-    hows = [how for at,col in data.cols.x.items() 
-            if (how := treeCuts(col,data.rows,at,Y,Klass))]
+    hows = [how for col in data.cols.x 
+            if (how := treeCuts(col,data.rows,Y,Klass))]
     if hows:
       for how1 in min(hows, key=lambda c: c.div).hows:
         rows1 = [r for r in data.rows if treeSelects(r, *how1)]
@@ -332,32 +341,32 @@ def Tree(data, Klass=Num, Y=None, how=None):
           data.kids += [Tree(dataClone(data,rows1), Klass, Y, how1)]
   return data
 
-def treeCuts(col, rows, at, Y, Klass):
+def treeCuts(col, rows, Y, Klass):
   "Divide a col into ranges."
   def _sym(sym):
     d, n = {}, 0
     for row in rows:
-      if (x := row[at]) != "?":
+      if (x := row[col.at]) != "?":
         n += 1
         d[x] = d.get(x) or Klass()
         add(d[x], Y(row))
     return o(div = sum(c.n/n * div(c) for c in d.values()),
-             hows = [("==",at,x) for x in d])
+             hows = [("==",col.at,x) for x in d])
   
   def _num(num):
     out, b4, lhs, rhs = None, None, Klass(), Klass()
-    xys = [(row[at], add(rhs, Y(row))) # add returns the "y" value
-           for row in rows if row[at] != "?"]
+    xys = [(row[col.at], add(rhs, Y(row))) # add returns the "y" value
+           for row in rows if row[col.at] != "?"]
     for x, y in sorted(xys, key=lambda z: z[0]):
       if x != b4 and the.leaf <= lhs.n <= len(xys) - the.leaf:
         now = (lhs.n * lhs.sd + rhs.n * rhs.sd) / len(xys)
         if not out or now < out.div:
-          out = o(div=now, hows=[("<=",at,b4), (">",at,b4)])
-      add(lhs, add(rhs, y, -1))
+          out = o(div=now, hows=[("<=",col.at,b4), (">",col.at,b4)])
+      add(lhs, sub(rhs, y))
       b4 = x
     return out
 
-  return (_sym if type(col) is Sym else _num)(col)
+  return (_sym if col.it is Sym else _num)(col)
 
 
 def treeNodes(data, lvl=0, key=None):
@@ -490,9 +499,9 @@ def statsCut(groups, eps):
                                                        
 def adds(src, col=None):
   "Summarize src into col (if col is None, them and guess what col to use)."
-  for row in src:
-    col = col or (Num if type(row) in [int,float] else Sym)()
-    add(col, row)
+  for x in src:
+    col = col or (Num if type(x) in [int,float] else Sym)()
+    add(col, x)
   return col
 
 def pretty(v, prec=0):
@@ -525,7 +534,7 @@ def all_egs(run=False):
         random.seed(the.seed)
         fn()
       else:  
-        print(" "+re.sub('eg__','--',k).ljust(10),"\t",fn.__doc__ or "")
+        print("   "+re.sub('eg__','--',k).ljust(10),"\t",fn.__doc__ or "")
 
 #  _        _.  ._ _   ._   |   _    _
 # (/_  ><  (_|  | | |  |_)  |  (/_  _> 
@@ -541,40 +550,42 @@ def eg__all():
 
 def eg__list(): 
   "List all examples"
+  print("\nezr.py [OPTIONS]\n")
   all_egs()
 
 def eg__the(): 
-  "Print config."
+  "Show the system config."
   print(the)
 
 def eg__sym(): 
-  "Demo a Sym struct."
+  "Sym: demo."
   print(adds("aaaabbc"))
 
 def eg__Sym(): 
-  "Demo Sym class computing symbol liklohood."
+  "Sym: demo of likelihood."
   s = adds("aaaabbc"); assert 0.44 == round(like(s,"a"),2)
 
 def eg__num(): 
-  "Demo a Num struct."
+  "Num: demo."
   print(adds(random.gauss(10,2) for _ in range(1000)))
 
 def eg__Num() : 
-  "Demo ia Sym struct computing number likelihood."
+  "Num: demo of likelihood."
   n = adds(random.gauss(10,2) for _ in range(1000))
   assert 0.13 == round(like(n,10.5),2)
 
 def eg__data(): 
-  "Demo reading data from file into a Data struct."
-  [print(col) for col in dataRead(the.file).cols.all]
+  "Data: demo of reading from file."
+  [print(col) for col in Data(csv(the.file)).cols.all]
 
 def eg__inc():
-  "Check i can add/delete rows incrementally."
-  d1 = dataRead(the.file)
+  "Data: updates. Incremental adds and deletes."
+  d1 = Data(csv(the.file))
   d2 = dataClone(d1)
+  print(d2.cols.x)
   x  = d2.cols.x[1]
   for row in d1.rows:
-    dataAdd(d2,row)
+    add(d2,row)
     if len(d2.rows)==100:  
       mu1,sd1 = x.mu,x.sd 
       print(mu1,sd1)
@@ -584,16 +595,45 @@ def eg__inc():
       print(mu2,sd2)
       assert abs(mu2 - mu1) < 1.01 and abs(sd2 - sd1) < 1.01
       break
-    dataAdd(d2,row,inc=-1,zap=True)
+    sub(d2,row,zap=True)
 
 def eg__bayes():
-  "Check likelihoods for all rows."
-  data = dataRead(the.file)
+  "Like: find likelihoods for all rows."
+  data = Data(csv(the.file))
   assert all(-30 <= likes(data,t) <= 0 for t in data.rows)
   print(sorted([round(likes(data,t),2) for t in data.rows])[::20])
 
+def eg__stats():
+   "Stats: numeric (effect size and significance tests)."
+   b4 = [random.gauss(1,1)+ random.gauss(10,1)**0.5
+         for _ in range(20)]
+   d, out = 0,[]
+   while d < 1:
+     now = [x+d*random.random() for x in b4]
+     out += [f"{d:.2f}" + ("y" if statsSame(b4,now) else "n")]
+     d += 0.05
+   print(', '.join(out))
+
+def eg__sk20():
+  "Stats: Checking rankings of 20 treatmeents, for increaseing sd"
+  n=20
+  for sd in [0.1,1,10]:
+    for eps in [1E-32,0.05,0.1,0.15,0.2]:
+      print("\neps=",eps, "sd=",sd)
+      rxs={}
+      G=lambda m:[random.gauss(m,sd) for _ in range(n)]
+      for i in range(20): 
+        if   i<=  4 : rxs[chr(97+i)] = G(10)
+        elif i <= 8 : rxs[chr(97+i)] = G(11)
+        elif i <=12 : rxs[chr(97+i)] = G(12)
+        elif i <=16 : rxs[chr(97+i)] = G(12)
+        else        : rxs[chr(97+i)] = G(14)
+      out=statsRank(rxs,eps=eps)
+      print("\t",''.join(map(daRx,out.keys())))
+      print("\t",''.join([str(x) for x in out.values()]))
+
 def eg__confuse():
-  "Check calcs for recall, precision etc.."
+  "Stats: discrete calcs for recall, precision etc.."
   # a b c <- got
   # ------. want
   # 5 1   | a
@@ -612,58 +652,25 @@ def eg__confuse():
        assert xpect[y.label] == got
   show(confused(cf))
 
-def eg__stats():
-   "Check stats calcs (effect size and significance tests)."
-   b4 = [random.gauss(1,1)+ random.gauss(10,1)**0.5
-         for _ in range(20)]
-   d, out = 0,[]
-   while d < 1:
-     now = [x+d*random.random() for x in b4]
-     out += [f"{d:.2f}" + ("y" if statsSame(b4,now) else "n")]
-     d += 0.05
-   print(', '.join(out))
-
-def daRx(t):
-    if not isinstance(t,(tuple,list)): return str(t)
-    return ':'.join(str(x) for x in t)
-
-def eg__sk():
-  "Checking rankings on 20 treatmeents."
-  n=20
-  for sd in [0.1,1,10]:
-    for eps in [1E-32,0.05,0.1,0.15,0.2]:
-      print("\neps=",eps, "sd=",sd)
-      rxs={}
-      G=lambda m:[random.gauss(m,sd) for _ in range(n)]
-      for i in range(20): 
-        if   i<=  4 : rxs[chr(97+i)] = G(10)
-        elif i <= 8 : rxs[chr(97+i)] = G(11)
-        elif i <=12 : rxs[chr(97+i)] = G(12)
-        elif i <=16 : rxs[chr(97+i)] = G(12)
-        else        : rxs[chr(97+i)] = G(14)
-      out=statsRank(rxs,eps=eps)
-      print("\t",''.join(map(daRx,out.keys())))
-      print("\t",''.join([str(x) for x in out.values()]))
-
 def eg__diabetes(): 
-  "Naive Bayes classifier test on diabetes."
+  "Naive Bayes classifier: test on diabetes."
   show(likeClassifier("../moot/classify/diabetes.csv"))
 
 def eg__soybean():  
-  "Naive Bayes classifier test on soybean."
+  "Naive Bayes classifier: test on soybean."
   show(likeClassifier("../moot/classify/soybean.csv"))
 
 def eg__distx():
-  "Check the x distance calcs."
-  data = dataRead(the.file)
+  "Dist: check x distance calcs."
+  data = Data(csv(the.file))
   r1= data.rows[0]
   ds= sorted([distx(data,r1,r2) for r2 in data.rows])
   print(', '.join(f"{x:.2f}" for x in ds[::20]))
   assert all(0 <= x <= 1 for x in ds)
 
 def eg__disty():
-  "Check the y distance calcs."
-  data = dataRead(the.file)
+  "Dist: check y distance calcs."
+  data = Data(csv(the.file))
   data.rows.sort(key=lambda row: disty(data,row))
   assert all(0 <= disty(data,r) <= 1 for r in data.rows)
   print(', '.join(data.cols.names))
@@ -671,21 +678,41 @@ def eg__disty():
   print("worst4:"); [print("\t",row) for row in data.rows[-4:]]
 
 def eg__irisKpp(): 
-  "Check the Kmeans++ centroids on iris."
-  [print(r) for r in distKpp(dataRead("../moot/classify/iris.csv"),k=10)]
+  "Dist: check Kmeans++ centroids on iris."
+  [print(r) for r in distKpp(Data(csv("../moot/classify/iris.csv")),k=10)]
 
 def eg__irisK(): 
-  "Check the Kmeans on iris."
-  for data in distKmeans(dataRead("../moot/classify/iris.csv"),k=10):
+  "Dist: check Kmeans on iris."
+  for data in distKmeans(Data(csv("../moot/classify/iris.csv")),k=10):
     print(mids(data)) 
+
+def eg__fmap():
+  "Dist:  diversity-based optimziation with fast map."
+  data = Data(csv(the.file))
+  for few in [32,64,128,256,512]:
+    the.Few = few
+    print(few)
+    n=adds(daBest(data, distFastermap(data,data.rows).labels.rows) for _ in range(20))
+    print("\t",n.mu,n.sd)
+
+def eg__rand():
+  "Dist:  diversity-based optimziation with random point selection."
+  data = Data(csv(the.file))
+  n = adds(daBest(data, random.choices(data.rows, k=the.Build)) for _ in range(20))
+  print("\t",n.mu,n.sd)
 
 def daBest(data,rows=None):
   rows = rows or data.rows
   Y=lambda r: disty(data,r)
   return Y(sorted(rows, key=Y)[0])
 
+def daRx(t):
+    if not isinstance(t,(tuple,list)): return str(t)
+    return ':'.join(str(x) for x in t)
+
 def eg__c():
-  data = dataRead(the.file)
+  "ABC: compare tree and bayes for exploring test data."
+  data = Data(csv(the.file))
   n = len(data.rows)//2
   repeats= 20
   for i in range(repeats):
@@ -706,8 +733,8 @@ def eg__c():
     print(f"{daBest(data2, rows2leaf):.3f} {daBest(data2, rows2bayes):.3f}")
   
 def eg__tree():
-  "Test the tree learend via active learning (from train data)."
-  data = dataRead(the.file)
+  "ABC: Test the tree on test data."
+  data = Data(csv(the.file))
   n = len(data.rows)//2
   repeats= 10
   for i in range(repeats):
@@ -729,25 +756,10 @@ def eg__tree():
     R    = lambda z:int(100*z)
     print(R(.35*base.sd), "tree", R(win), "tree10", R(win1), "rand", R(win0) , "diff", R(diff))
 
-def eg__fmap():
-  "Checl diversity based on recursive fast map."
-  data = dataRead(the.file)
-  for few in [32,64,128,256,512]:
-    the.Few = few
-    print(few)
-    n=adds(daBest(data, distFastermap(data,data.rows).labels.rows) for _ in range(20))
-    print("\t",n.mu,n.sd)
-
-def eg__rand():
-  "Simple optimization from points picked randomly."
-  data = dataRead(the.file)
-  n = adds(daBest(data, random.choices(data.rows, k=the.Build)) for _ in range(20))
-  print("\t",n.mu,n.sd)
-
 def eg__klass():
-  "Active learning based on 'klass'."
+  "ABC: acquire using 'klass'."
   print(1)
-  data = dataRead(the.file)
+  data = Data(csv(the.file))
   base = adds(disty(data,r) for r in data.rows)
   for few in [15,30,60]:
     the.Few = few
@@ -758,8 +770,8 @@ def eg__klass():
       print(f"\t {the.acq} {base.mu:.3f}, {base.lo:.3f} {n.mu:.3f} {n.sd:.3f}")
 
 def eg__old():
-  "Compare diversity acquisition strategies."
-  data = dataRead(the.file)
+  "ABC: compare diversity acquisition strategies."
+  data = Data(csv(the.file))
   rxs = dict(
          distKpp= lambda d: distKpp(d, d.rows),
          sway   = lambda d: distFastermap(d, d.rows, sway1=True).labels.rows,
@@ -771,8 +783,8 @@ def eg__old():
 #  196  13                                                                         35      36       35        35      38       43        35      38       70        34       39        100           A
              
 def eg__liking():
-  "Compare Bayesian acquisition strategies."
-  data = dataRead(the.file)
+  "ABC: compare Bayesian acquisition strategies."
+  data = Data(csv(the.file))
   rxs = dict(#rand   = lambda d: random.choices(d.rows,k=the.Build),
              klass = lambda d: likely(d,d.rows,"klass").labels, #<== klass
              xploit = lambda d: likely(d,d.rows,"xploit").labels,
@@ -787,8 +799,8 @@ def eg__liking():
 
 
 def eg__final():
-  "Compare the better acquisition strategies."
-  data = dataRead(the.file)
+  "ABC: ompare the better acquisition strategies."
+  data = Data(csv(the.file))
   rxs = dict(rand   = lambda d: random.choices(d.rows,k=the.Build),
              klass = lambda d: likely(d,d.rows,"klass").labels, #<== klass
              sway2  = lambda d: distFastermap(d, d.rows).labels.rows # <== sway2
