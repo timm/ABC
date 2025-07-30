@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Tim Menzies timm@ieee.org" />
-  <title>The ABCs of Easier AI</title>
+  <title>The EZRs of Easier AI</title>
   <style>
     html {
       color: #1a1a1a;
@@ -108,8 +108,8 @@
      overflow: visible;
     }
     hr {
-      background-color: #1a1a1a;
       border: none;
+      border-top: 1px solid #1a1a1a;
       height: 1px;
       margin: 1em 0;
     }
@@ -168,8 +168,9 @@
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -180,7 +181,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -234,7 +235,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">The ABCs of Easier AI</h1>
+<h1 class="title">The EZRs of Easier AI</h1>
 <p class="author">Tim Menzies<br>timm@ieee.org</p>
 <p class="date">July, 2025</p>
 </header>
@@ -275,38 +276,38 @@ asked:</p>
 </blockquote>
 <p>“Maybe they don’t,” I replied. “Maybe we just have not learned how to
 ask the right questions yet.”</p>
-<p>My claim led to a dare, which led to a prototype. ABC sorts a few
+<p>My claim led to a dare, which led to a prototype. EZR sorts a few
 labelled examples into “best” and “rest”. A simple Bayes classifier
-decides what to look at next (ABC always grabs the next example that is
+decides what to look at next (EZR always grabs the next example that is
 most likely to be “best” and least likely to be “rest”). After each
-labeling, ABC rebuilds “best” and “rest” models, and the cycle repeated.
-After just a few dozen labellings, ABC builds a regressions tree from
+labeling, EZR rebuilds “best” and “rest” models, and the cycle repeated.
+After just a few dozen labellings, EZR builds a regressions tree from
 the labeled examples. This summarizes the reasoning into a clear and
 compact explanation.</p>
-<p>To say the least, ABC is far simpler (and orders of magnitude faster)
+<p>To say the least, EZR is far simpler (and orders of magnitude faster)
 than alternatives like large language models, Gaussian Processes, or
-evolutionary reinforcement learning. ABC is just 300 lines of Python and
+evolutionary reinforcement learning. EZR is just 300 lines of Python and
 does not need heavy libraries like pandas or scikit-learn.</p>
 <p>But in a result supporting “less is more”, the first time we tried
-it, ABC found near-optimal car designs after labeling just 20–30
+it, EZR found near-optimal car designs after labeling just 20–30
 examples. Its decision tree could explain what was happening, enabling
-human understanding and critique. Because it’s so small, ABC is
+human understanding and critique. Because it’s so small, EZR is
 well-suited for teaching principles of AI and SE scripting. And because
-it’s so fast to run and easy to modify, ABC is a productive tool for
+it’s so fast to run and easy to modify, EZR is a productive tool for
 state-of-the-art research.</p>
-<p>This suprising success of ABC lead to another question:</p>
+<p>This suprising success of EZR lead to another question:</p>
 <blockquote>
-<p>“Was this just a fluke? Was ABC just being tested one an unusually
+<p>“Was this just a fluke? Was EZR just being tested one an unusually
 easy problem?”</p>
 </blockquote>
 <p>To test that, we went looking for harder problems. We gathered over
 110 real-world case studies from recent, peer-reviewed software
 engineering research—covering configuration optimization, architecture
-tuning, effort estimation, and more. Then we reran the experiment at
-scale. The results, shown below, demonstrated that ABC works remarkably
+tuning, effort estimation, and more. Then we reran the experiment, at
+scale. The results, shown below, demonstrated that EZR works remarkably
 well (quickly and effectively) for a broad range of problems taken from
 the SE literatures.</p>
-<p>This experience wuth ABC has shifted our thinking. The sucess of ABC
+<p>This experience wuth EZR has shifted our thinking. The sucess of EZR
 was not luck- it points to something deeper: an approach to software
 engineering and AI where, often, a few well-chosen examples outperform
 brute-force data collection. For centuries, researchers have told us
@@ -315,9 +316,9 @@ complex problems efficiently (see Table 1).</p>
 <p>Yet despite this legacy of elegant minimalism, today’s trends often
 favor the opposite: ever-larger models, more data, and growing
 complexity. There are many reasons for this[^subtract], but a major one
-is inertia—we tend to add rather than subtract, mistaking bloat for
+is inertia: we tend to add rather than subtract, mistaking bloat for
 progress. Complex products impress the marketplace and so can drive
-sales (even if, later, that drives up maintainance costs).</p>
+sales (even if, later, that also drives up maintainance costs).</p>
 <table>
 <colgroup>
 <col style="width: 6%" />
@@ -448,27 +449,27 @@ across diverse domains</strong></li>
 </ul>
 <p>Using this code and data, we ask five questions:</p>
 <ul>
-<li><p><strong>RQ1: Is ABC simple?</strong><br />
+<li><p><strong>RQ1: Is EZR simple?</strong><br />
 Is our code base compact and readable and suitabke for teaching and
 tinkering?</p></li>
-<li><p><strong>RQ2: Is ABC fast?</strong><br />
+<li><p><strong>RQ2: Is EZR fast?</strong><br />
 Can our code complete tasks in milliseconds rather than hours?</p></li>
-<li><p><strong>RQ3: Is ABC effective?</strong><br />
+<li><p><strong>RQ3: Is EZR effective?</strong><br />
 Can our achieve strong results after seeing only a few
 examples?</p></li>
-<li><p><strong>RQ4: Is ABC insightful?</strong><br />
+<li><p><strong>RQ4: Is EZR insightful?</strong><br />
 Does our code support explainability, critique, and
 understanding?</p></li>
-<li><p><strong>RQ5: Is ABC general?</strong><br />
+<li><p><strong>RQ5: Is EZR general?</strong><br />
 Does our code apply across various tasks?</p></li>
 </ul>
-<p>This last question deserves extra attention. ABC is not a solution to
+<p>This last question deserves extra attention. EZR is not a solution to
 everythng. Some tasks are inherently complex and need inherently compex
 solutions. or example, this document was written with extensive
 editorial support by a large language model (big AI was used to
 sumamrize verbose sections into shorter and simpler segments). In RQ5,
 we describe the “BINGO” test which is a way to peek at data in order to
-decide they you need something more than just ABC.</p>
+decide they you need something more than just EZR.</p>
 <p>All the code and data used here can be accessed as fllows</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mkdir demo<span class="op">;</span> cd demo</span>
@@ -495,161 +496,170 @@ control settings →            Energy-, time-,  cpu-
 <p>Any number of AI tools could learn what separates “best” from “rest.”
 But here’s the challenge: <strong>labeling</strong> each configuration
 (e.g., by running all the benchmarks for all possible configurations) is
-expensive. So the ABC challenge is how to learn an effective model with
+expensive. So the EZR challenge is how to learn an effective model with
 minimal effort?</p>
-<p>That’s where ABC comes in. We call it that since it uses a minimalist
+<p>That’s where EZR comes in. We call it that since it uses a minimalist
 A–B–C strategy:</p>
 <ul>
-<li><p><strong>A: Ask anything</strong> Randomly label a few examples
-(say, <em>A = 4</em>) to seed the process.</p></li>
-<li><p><strong>B: Build a model</strong> Build contrastive models for
-“best” and “rest,” then label up to, say <em>B = 24</em> more rows by
-picking the unlabelled row that maximizes the score <em>b/r</em> (where
-<code>b</code> and <code>r</code> are likelihoods that a row belongs to
-the “best” and “rest” models).</p></li>
-<li><p><strong>C: Check the model</strong> Apply the learned model to
-unlabeled data and to select a small set (e.g., <em>C=5</em>) of the
-most promising rows. After labelling those rows, return the best
+<li><p><strong>A=Any</strong>; i.e. “ask anything”. Randomly label a few
+examples (say, <em>A = 4</em>) to seed the process.</p></li>
+<li><p><strong>B=Build</strong>; i.e. build a model** In this phase, we
+build contrastive models for “best” and “rest,” then label up to, say
+<em>B = 24</em> more rows by picking the unlabelled row that maximizes
+the score <em>b/r</em> (where <code>b</code> and <code>r</code> are
+likelihoods that a row belongs to the “best” and “rest”
+models).</p></li>
+<li><p><strong>C=Check</strong>; i.e. check the model. Apply the learned
+model to unlabeled data and to select a small set (e.g., <em>C=5</em>)
+of the most promising rows. After labelling those rows, return the best
 one.</p></li>
 </ul>
-<p>In this task, after labeling just 24 out of 800 rows (∼3%), ABC
-constructs a bibary regression tree from those 24 examples. In that
+<p>In this task, after labeling just 24 out of 800 rows (∼3%), EZR
+constructs a binary regression tree from those 24 examples. In that
 tree, left and right branches go best and worse examples. The left-most
-branch of that tree is shwin here (and to get to any line in this tree,
-all the things abve it have to be true.</p>
-<pre><code>crypt_blowfish=0
-|  memory_tables=1
-|  |  detailed_logging=1
-|  |  |  no_write_delay=0
-|  |  |  |  compressed_script=0 ==&gt; win = 99</code></pre>
-<p>As shown below, we score this reasoning with a number that goes up to
-100. The “win=99” score (seen on the last line) means we have very
-nearly matching the globally best result, after looking at a tiny
-fraction of the available data. Note that this branch only mentions five
-options, and three of those are all about what to turn off. That is to
-say, even though this databased has dozens of configuration options,
-there are three bad things to avoid and only two most important thing to
-enable (<em>memory_tables</em> and <em>detailed_logging</em>). to a
-method for creating a hashed representation of a password using an
-algorithm based on the Blowfish cipher.</p>
-<p>In our experience, if you ever show a result like this to a subject
-matter expert, they will push back. For example, they might demand to
-know what happems when <code>crypt_blowfish</code> is enabled. Blowfish
-in password hashing scheme. It makes password protection slower but it
-also increases the computational effort required for attackers to
-brute-force attack the database’s security. The full tree generted by
-ABC shows what happens this feature is enabled. Note all the negative
-“wins” which is to say, if your goals are fast runtimes, do not
+branch of that tree is shown here (and to get to any line in this tree,
+all the things abve it have to be true).</p>
+<pre><code>if crypt_blowfish == 0
+|  if memory_tables == 1
+|  |  if detailed_logging == 1
+|  |  |  if no_write_delay == 0; &lt;== win=98%</code></pre>
+<p>These four conditions select rows that vey clone (98%) to optimial
+Note that this branch only mentions four options, and two of those are
+all about what to turn off. That is to say, even though this databased
+has dozens of configuration options, there are two bad things to avoid
+and only two most important thing to enable (<em>memory_tables</em> and
+<em>detailed_logging</em>).</p>
+<p>Of course, if you ever show a result like this to a subject matter
+expert, they will push back. For example, they might demand to know what
+happens when <code>crypt_blowfish</code> is enabled. Blowfish in
+password hashing scheme. It makes password protection slower but it also
+increases the computational effort required for attackers to brute-force
+attack the database’s security. The full tree generted by EZR shows what
+happens this feature is enabled. (see the last two lines). Note all the
+negative “wins” which is to say, if your goals are fast runtimes, do not
 <code>crypt_blowfish</code>.</p>
-<pre><code>|  memory_tables=1
-|  |  detailed_logging=1
-|  |  |  no_write_delay=0
-|  |  |  |  compressed_script=0; ==&gt; win = 99
-|  |  |  |  compressed_script=1; ==&gt; win = 96
-|  |  detailed_logging=0;        ==&gt; win = 85
-|  memory_tables=0
-|  |  encryption=0
-|  |  |  no_write_delay=0;       ==&gt; win = 53
-|  |  |  no_write_delay=1
-|  |  |  |  txc_mvlocks=0
-|  |  |  |  |  logging=0;        ==&gt; win = 51
-|  |  |  |  |  logging=1;        ==&gt; win = 49
-|  |  encryption=1
-|  |  |  txc_mvlocks=0;          ==&gt; win = 51
-crypt_blowfish=1
-|  memory_tables=1
-|  |  logging=1;                 ==&gt; win = -47
-|  |  logging=0;                 ==&gt; win = =54
-|  memory_tables=0
-|  |  txc_mvlocks=0;             ==&gt; win = -304</code></pre>
-<p>(Aside: of course if security is an important goal then (a) add a
-“security+” column to the training data shown above; (b) re-un ABC; (c)
-check what are the mpracts of that additional goal.)</p>
-<p>ABC shows that with the right strategy, a handful of examples can
-uncover nearly all the signal. All of this took just a few dozen
-queries—and a few hundred lines of code. It’s a striking illustration of
-the Pareto principle: <strong>most of the value often comes from just a
-small fraction of the effort</strong>.</p>
-<h2 id="discussion">Discussion</h2>
-<p>Before looking at the code, we address the questions often asked
-about the above exampel?</p>
-<h3 id="why-not-label-everything">Why not label everything?</h3>
-<p>The above code assumed we can only label 24 our of 800 examples. Why
-do that?</p>
-<p>Well, labeling is costly:</p>
-<ul>
-<li>Benchmarks take time to run.</li>
-<li>Some configurations require complex rebuilds.</li>
-<li>Human evaluation is slow, expensive, and error-prone.</li>
-</ul>
-<p>Prior work has shown that even with big compute, building labeled
-datasets takes <strong>months or years</strong>. ABC sidesteps this by
-labeling only what matters most.</p>
-<h3 id="so-how-does-abc-help">So how does ABC help?</h3>
-<p>ABC operates under a <strong>tiny-AI assumption</strong>: most of the
-signal is buried under a layer of irrelevant or redundant data. It was
-inspred byt George Kelly’s Personal Construct Theory (from the 1950s)
-that stressed the value of contrast set learning to recognize what is
-different between concepts.</p>
-<p>Modern versions of contrast set learning include various rule-based
-learners including our own previous work on TAR3 and WHICH. ABC’s
+<pre><code> #rows  win
+```python
+17   68    if crypt_blowfish == 0
+ 7   94    |  if memory_tables == 1
+ 5   97    |  |  if detailed_logging == 1
+ 4   98    |  |  |  if no_write_delay == 0;
+10   49    |  if memory_tables == 0
+ 7   51    |  |  if encryption == 0
+ 5   50    |  |  |  if no_write_delay == 1
+ 4   50    |  |  |  |  if txc_mvlocks == 0;
+ 7 -165    if crypt_blowfish == 1
+ 4  -51    |  if memory_tables == 1;</code></pre>
+<pre><code>
+(Aside: of course if security is an important goal then (a) add a
+&quot;security+&quot; column to the training data shown above; (b)  re-un
+EZR; (c) check what are the mpracts of that additional goal.)
+
+EZR shows that with the right strategy, a handful of examples 
+(in this case, 24) can
+uncover nearly all the signal.  All of this took just a few dozen
+queries—and a few hundred lines of code. It’s a striking illustration
+of the Pareto principle:  **most of the value often comes from just
+a small fraction of the effort**.
+
+
+## Discussion
+
+Before looking at the code, we address the questions often asked about the above exampel?
+
+### Why not label everything?
+
+The above code assumed we can only label 24 our of 800 examples. Why do that?
+
+Well, labeling is costly:
+
+- Benchmarks take time to run.
+- Some configurations require complex rebuilds.
+- Human evaluation is slow, expensive, and error-prone.
+
+Prior work has shown that even with big compute, building labeled
+datasets takes **months or years**. EZR sidesteps this by labeling
+only what matters most.
+
+
+### So how does EZR help?
+
+EZR operates under a **tiny-AI assumption**: most of the signal is
+buried under a layer of irrelevant or redundant data. It was inspred
+byt George Kelly&#39;s Personal Construct Theory (from the 1950s) that
+stressed the value of contrast set learning to  recognize what is
+different between concepts.
+
+Modern versions of contrast set learning include various rule-based
+learners including our own previous work on TAR3 and WHICH. EZR&#39;s
 variant on contrast set learning throws away most of that architecture
-and repalces it with a simple two-class classification approach. Tables
-of data describing the “best” and “rest” examples can compute the
-likilihoods <em>b,r</em> of of an as-yet-unclassified example belonging
-to “best” or “rest”. The next example to label is the one that maximizes
-some <em>acquisiton function</em> e.g. <em>b/r</em>.</p>
-<h3 id="what-is-new-about-abc">What is New About ABC?</h3>
-<p>This work builds upon the foundation laid by prior resarch, but it
-removes some key barriers that limits the practical use of thsose
-methods.</p>
-<p>Often we are asked “if ABC just’ simplifies existing methods, it is
-worthy of publciation?”. If so many past resarechers have explored
-simplifty (see Table 1), what is new and itneresting about ABC?</p>
-<p>In reply, we say offer the observation that propr simplicity results
-are alomst uneirsally ignored. Each year we interview dozens of
+and repalces it with a simple two-class classification approach.
+Tables of data describing the &quot;best&quot; and &quot;rest&quot; examples can compute
+the likilihoods _b,r_ of of an as-yet-unclassified example belonging
+to &quot;best&quot; or &quot;rest&quot;. The next example to label is the one that
+maximizes some _acquisiton function_ e.g. _b/r_.
+
+### What is New About EZR?
+
+This work builds upon the foundation laid by prior resarch, but it
+removes some key barriers  that limits the practical use of thsose
+methods.
+
+Often we are asked &quot;if EZR just&#39; simplifies existing methods, it
+is worthy of publciation?&quot;. If so many past resarechers have explored
+simplifty (see Table 1), what is new and itneresting about EZR?
+
+In reply, we say offer the observation that propr simplicity results
+are alomst uneirsally ignored.  Each year we interview dozens of
 propsectivegraduate students for our reserch labs. We also interact,
-extensively, with industrial pracitioners and many other researchers at
-conferences. Nearly unviersally, when faced with any new AI problem,
-thei default action is to reach for some alrge language model or deep
-learning solution.</p>
-<p>simplification research is valid resaerch. A persistant human
-congintive basi is to under-value subtractive impormvents. Klotz et
-al. report nmueris studies where</p>
-<p>case studies where hmans are given patterns on a chess baord, then
-asked to change the pattern in order to make it more symmetrical.
-OVerhwlemmning, humans prefer to add new squares to the pattern, rather
-than take squares away.</p>
-<p>As Klotz et al. warns:</p>
-<blockquote>
-<p>“Defaulting to searches for additive changes may be one reason that
-people struggle to mitigate overburdened schedules, institutional red
-tape and damaging effects on the planet.”</p>
-</blockquote>
-<h3 id="why-use-a-decision-tree">Why use a decision tree?</h3>
-<p>Decision trees are:</p>
-<ul>
-<li><strong>Fast to train</strong><br />
-</li>
-<li><strong>Sparse by nature</strong><br />
-</li>
-<li><strong>Easy to read</strong></li>
-</ul>
-<p>As physicist Ernest Rutherford famously quipped:<br />
-&gt; “A theory that you can’t explain to a bartender is probably no damn
-good.”</p>
-<p>Each path in the tree offers a <strong>human-readable recipe for
-improvement</strong>, grounded in real measurements.</p>
-<h3 id="how-is-win-defined">How is “win” defined?</h3>
-<p>Each row has <em>n</em> goals that we are trying to minimize or
-maximize. In the labelled data, each goal column has a min and max value
-seen so far. After normalizng each goal has the value 0..1 (for
-min..max), we can say that minimizing goals have a best value of “0” and
-maximizing goals have a best value of “1”.</p>
-<pre><code>y(row) = sqrt(sum(abs(norm(goal) - goal.most)^2 for goal in cols.y))</code></pre>
-<p>We normalize utility as:</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>win <span class="op">=</span> <span class="dv">100</span> × (<span class="dv">1</span> <span class="op">-</span> (mean(y) <span class="op">-</span> best) <span class="op">/</span> (median <span class="op">-</span> best))</span></code></pre></div>
+extensively, with industrial pracitioners and many other researchers
+at conferences.  Nearly unviersally, when faced with any new AI
+problem, thei default action is to reach for some alrge language
+model or deep learning solution.
+
+simplification research is valid resaerch.
+A persistant human congintive basi is to under-value subtractive impormvents.
+Klotz et al. report nmueris studies where
+
+case studis where hmans are given patterns on a chess baord, then asked to change the pattern in order to make it more symmetrical.
+OVerhwlemmning, humans prefer to add new squares to the pattern, rather than take squares away. 
+
+As Klotz et al. warns:
+
+&gt; &quot;Defaulting to searches for additive changes may be one reason
+that people struggle to mitigate overburdened schedules, institutional red tape
+and damaging effects on the planet.&quot;
+
+### Why use a decision tree?
+
+Decision trees are:
+
+- **Fast to train**  
+- **Sparse by nature**  
+- **Easy to read**
+
+As physicist Ernest Rutherford famously quipped:  
+&gt; “A theory that you can’t explain to a bartender is probably no damn good.”
+
+Each path in the tree offers a **human-readable recipe for improvement**, grounded in real measurements.
+
+
+### How is “win” defined?
+
+Each row has _n_ goals that  we are trying to minimize or maximize. In
+the labelled data, each
+goal column has a min and max value
+seen so far.  After normalizng each goal has the value 0..1 (for min..max),
+we can say that minimizing goals have a best value of &quot;0&quot; and
+maximizing goals have a best value of &quot;1&quot;.
+</code></pre>
+<p>y(row) = sqrt(sum(abs(norm(goal) - goal.most)^2 for goal in
+cols.y))</p>
+<pre><code>
+We normalize utility as:
+
+```python
+win = 100 × (1 - (mean(y) - best) / (median - best))</code></pre>
 <ul>
 <li>A win of <strong>100</strong> means we match the best.<br />
 </li>
@@ -663,7 +673,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a hr
 href="https://github.com/timm/moot">MOOT</a> repository. Each MOOT
 dataset has: - Between 1,000 and 100,000 rows - 5 to 1,000+
 configuration choices - Up to 3 goal metrics</p>
-<p>XXXX need to explain ABC</p>
+<p>XXXX need to explain EZR</p>
 <p>We tested EZR 10× on each dataset. In each trial: - <em>A = 4</em>,
 <em>B = 24</em>, <em>C = 5</em> - EZR built a model from training data -
 Test data was ranked by the model - Top 5 predictions were compared to
@@ -747,11 +757,11 @@ Scores)</h4>
 </tbody>
 </table>
 <p>Note that, one time in ten, even dumb guessing gets lucky and does
-surprisingly well (the 10% case where “dumb” is 12% better than ABC).
+surprisingly well (the 10% case where “dumb” is 12% better than EZR).
 But we do not want to be “dumb” since dumb reasoning does not
-generalize. On the other hand, <strong>ABC’s trees provide both
+generalize. On the other hand, <strong>EZR’s trees provide both
 performance and understanding.</strong> To say that another way, dumb
-reasonng just says yes or now. ABC tells you how and why.</p>
+reasonng just says yes or now. EZR tells you how and why.</p>
 <p>ALso, while dumb guessing is simple, EZR is barely more complex—just
 a few hundred lines of code—and runs fast. The full experiment (10× on
 110 datasets) took just <strong>65 seconds</strong> on a Mac mini with
@@ -770,6 +780,161 @@ grounded in:</p>
 <li><strong>Ownership</strong></li>
 </ul>
 <p>—all without sacrificing performance.</p>
+<h2 id="data">Data</h2>
+<p>To understand the code, first we have to understand the data it
+processess. Here’s a typical input file. In this example, the goal is to
+to tune Spout wait, Spliters, Counters in order to maximize Throughput
+(marked with a
+<code>+'') and minimze Latency (marked with a</code>-’’).</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> independent values          <span class="op">|</span> y <span class="op">=</span> dependent values</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">--------------------------------|----------------------</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  Spout_wait, Spliters, Counters, <span class="op">|</span> Throughput<span class="op">+</span>, Latency<span class="op">-</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">23075</span>,    <span class="fl">158.68</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22887</span>,    <span class="fl">172.74</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22799</span>,    <span class="fl">156.83</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>,        <span class="dv">3</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22430</span>,    <span class="fl">160.14</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    ...,      ...,      ...,           ...,    ...</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">10</span>,      <span class="op">|</span>   <span class="fl">460.81</span>,    <span class="fl">8761.6</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">18</span>,      <span class="op">|</span>   <span class="fl">402.53</span>,    <span class="fl">8797.5</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">12</span>,      <span class="op">|</span>   <span class="fl">365.07</span>,    <span class="fl">9098.9</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,        <span class="dv">1</span>,      <span class="op">|</span>   <span class="fl">310.06</span>,    <span class="dv">9421</span></span></code></pre></div>
+<p>EZR processes tables of data with x inputs and y goals.</p>
+<ul>
+<li>The first row shows the column names.</li>
+<li>Numeric columns start with uppercase, all others are /symbolic.</li>
+<li>Goal columns (e.g. Fig. 3’s Throughput+, Latency-) use +/- to denote
+maximize and minimize.</li>
+</ul>
+<p>For the purposes of illustration, the rows in this table are sorted
+from best to worst based on those goals (during experimentation, row
+order should initially be randomized),</p>
+<p>For the purposes of evaluation, all rows in MOOT data sets contain
+all their y values. When evaluating the outcome of an optimizer, these
+values are used to determine how well the optimizer found the best
+rows.</p>
+<p>For the purposes of optimization experiments, researchers should hide
+the y-values from the optimizer. Each time the optimizer requests the
+value of a particular row, this “costs” one unit. Good optimizers find
+good goals at least cost (i.e. fewest labels).</p>
+<h2 id="structs">Structs</h2>
+<p>EZR does not use Python classes since this lets use spread
+functionalty of structs over multiple files (this is useful since, it
+lets place arcane detail out of the way of the simpler stuff). Instead,
+its structs are based on <code>SimpleNamespace</code> objects that can
+pretty print themselves, and which allow access to content via the
+standard dot notation.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> types <span class="im">import</span> SimpleNamespace <span class="im">as</span> o</span></code></pre></div>
+<p>In EZR, rows of data are summarized into
+<code></code>Num<code>s (numeric) or</code>Sym<code>(symbolic) columns. Each column knows the</code>txt<code>of its name  and its column position (in</code>at<code>).</code>Sym<code>s keep a count of the symbols seen so far (in</code>has`).</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Sym(at<span class="op">=</span><span class="dv">0</span>, txt<span class="op">=</span><span class="st">&quot;&quot;</span>): </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> o(it<span class="op">=</span>Sym, at<span class="op">=</span>at, txt<span class="op">=</span>txt, has<span class="op">=</span>{})</span></code></pre></div>
+<p><code>Num</code>s also keep track of the smallest and largest number
+seen so far (<code>lo</code>, <code>hi</code>) as well as the mean
+<code>mu</code> and standard devaition <code>sd</code>. Further,
+<code>Num</code>s also know if they are a goal that needs minimization
+(if the last letter of its name is <code>-</code>, then <em>better</em>
+values are <em>smaller</em>).</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Num(at<span class="op">=</span><span class="dv">0</span>, txt<span class="op">=</span><span class="st">&quot; &quot;</span>): </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> o(it<span class="op">=</span>Num, at<span class="op">=</span>at, txt<span class="op">=</span>txt, lo<span class="op">=</span><span class="fl">1e32</span>, mu<span class="op">=</span><span class="dv">0</span>, m2<span class="op">=</span><span class="dv">0</span>, sd<span class="op">=</span><span class="dv">0</span>, n<span class="op">=</span><span class="dv">0</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           hi<span class="op">=-</span><span class="fl">1e32</span>, more <span class="op">=</span> <span class="dv">0</span> <span class="cf">if</span> txt[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="st">&quot;-&quot;</span> <span class="cf">else</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><code>Num</code>s and <code>Syms</code> are generated from the names
+on row1 of the data. Upper case names generated <code>Num</code>s and
+other names are <code>Sym</code>s. Columns have different roles; e.g. if
+their name ends in <code>+-</code> then they are part of the dependent
+output variables <code>y</code>. Otherwise, they are part of the
+<code>x</code> indepdentent inputs. Apart from that, they are also
+present in the list of <code>all</code> columns.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a> <span class="kw">def</span> Cols(names):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>   <span class="bu">all</span>, x, y, klass <span class="op">=</span> [],[],[],<span class="va">None</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> c,s <span class="kw">in</span> <span class="bu">enumerate</span>(names):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>     <span class="bu">all</span> <span class="op">+=</span> [(Num <span class="cf">if</span> s[<span class="dv">0</span>].isupper() <span class="cf">else</span> Sym)(c,s)]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> s[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="st">&quot;X&quot;</span>: <span class="cf">continue</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> s[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="st">&quot;!&quot;</span>: klass <span class="op">=</span> <span class="bu">all</span>[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>     (y <span class="cf">if</span> s[<span class="op">-</span><span class="dv">1</span>] <span class="kw">in</span> <span class="st">&quot;!-+&quot;</span> <span class="cf">else</span> x).append(<span class="bu">all</span>[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> o(it<span class="op">=</span>Cols, names<span class="op">=</span>names, <span class="bu">all</span><span class="op">=</span><span class="bu">all</span>, x<span class="op">=</span>x, y<span class="op">=</span>y, klass<span class="op">=</span>klass)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<p>(Note if a column name ends in <code>X</code> it should be skiiped by
+the inference. <code>Cols</code> implments this by skipping over such
+columns and not adding them to the <code>x</code> or <code>y</code>
+roles.)</p>
+<p>All these columns, and their associated ros are stored within a
+<code>Data</code>. This is just a set of <code>rows</code> and their
+sumamries in <code>cols</code>. The first item in a input
+<code>src</code> of information is grabbed and used by <code>COls</code>
+to create a list of <code>cols</code> (columns). Any remaining items
+within that src are then added to the <code>Data</code> struct.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Data(src):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  src <span class="op">=</span> <span class="bu">iter</span>(src)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> adds(src, o(it<span class="op">=</span>Data, n<span class="op">=</span><span class="dv">0</span>, rows<span class="op">=</span>[], cols<span class="op">=</span> Cols(<span class="bu">next</span>(src))))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> adds(src, it<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">&quot;A handy helper function for adding many values to some struct.&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  it <span class="op">=</span> it <span class="kw">or</span> Num()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  [add(it, x) <span class="cf">for</span> x <span class="kw">in</span> src]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> it</span></code></pre></div>
+<p>import random, math, sys, re</p>
+<p>def atom(s): for fn in [int,float]:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>: <span class="cf">return</span> fn(s)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> _: <span class="cf">pass</span></span></code></pre></div>
+<p>s = s.strip() return {‘True’:True,‘False’:False}.get(s,s)</p>
+<p>the = o(**{k:atom(v) for k,v in
+re.findall(r”(+)=(+)“,<strong>doc</strong>)})</p>
+<h2 id="code">Code</h2>
+<p>The core of EZR is around 200 lines of Python. Around that core are
+hundreds of lines of other code containing a test suite, some
+statistical analysis, and a whole bunch of other methods that are not
+essential or recommmended, but inclde here for comparisons purposes.</p>
+<p>The code inputs a csv file</p>
+<p>When reading that file, it is best to start at the top and bottom.
+The bottom of the code contains a long ist of <code>eg__xxx</code>
+functions which can be called from the command line
+<code>python3 ezr.py --xxx</code>. To get a list of these functions, use
+the <code>--list</code> flag. The functions are listed top to bottom,
+simplest to most complex.</p>
+<pre><code>&gt; ezr --list
+
+ezr.py [OPTIONS]
+
+   --list        List all examples
+   --the         Show the system config.
+   --sym         Sym: demo.
+   --Sym         Sym: demo of likelihood.
+   --num         Num: demo.
+   --Num         Num: demo of likelihood.
+   --data        Data: demo of reading from file.
+   --inc         Data: updates. Incremental adds and deletes.
+   --bayes       Like: find likelihoods for all rows.
+   --stats       Stats: numeric (effect size and significance tests).
+   --sk20        Stats: Checking rankings of 20 treatmeents, for increaseing sd
+   --confuse     Stats: discrete calcs for recall, precision etc..
+   --diabetes    Naive Bayes classifier: test on diabetes.
+   --soybean     Naive Bayes classifier: test on soybean.
+   --distx       Dist: check x distance calcs.
+   --disty       Dist: check y distance calcs.
+   --irisKpp     Dist: check Kmeans++ centroids on iris.
+   --irisK       Dist: check Kmeans on iris.
+   --fmap        Dist:  diversity-based optimziation with fast map.
+   --rand        Dist:  diversity-based optimziation with random point selection.
+   --c           ABC: compare tree and bayes for exploring test data.
+   --tree        ABC: Test the tree on test data.
+   --klass       ABC: acquire using &#39;klass&#39;.
+   --old         ABC: compare diversity acquisition strategies.
+   --liking      ABC: compare Bayesian acquisition strategies.
+   --final       ABC: ompare the better acquisition strategies.</code></pre>
+<p>The top of the code’s <code>__docstring__</code> shows the code’s
+options, the most important of which are the <code>-A</code>,
+<code>-B</code>, <code>-C</code> flags that control Any, Build, and
+Check. The rest of the flags do thigs like set the random numer seed
+(<code>-s</code>) and where to find input data (<code>-f</code>).</p>
+<p>Python nodes - meta-model. Doc strings in files and functions.
+globals (to get list of functions).</p>
 <h1 id="easer-ai-why">Easer AI: Why?</h1>
 <p>This section offers motivation for exploring little AI tools like
 EZR.</p>
@@ -964,17 +1129,17 @@ the “key” decisions in RE models. Second, have stakeholders debate, and
 then decide, about the keys before exploring anything else. Third, to
 avoid trivially small solutions, our random search should strive to
 cover much of the model. Code:</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Data(src):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> _guess(row):</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(interpolate(data,row,<span class="op">*</span>pole) <span class="cf">for</span> pole <span class="kw">in</span> poles)<span class="op">/</span><span class="bu">len</span>(poles)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  head, <span class="op">*</span>rows <span class="op">=</span> <span class="bu">list</span>(src)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  data  <span class="op">=</span> _data(head, rows)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  poles <span class="op">=</span> projections(data)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> row <span class="kw">in</span> rows: row[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> _guess(row)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> data</span></code></pre></div>
-<h3 id="data">Data</h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Data(src):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> _guess(row):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(interpolate(data,row,<span class="op">*</span>pole) <span class="cf">for</span> pole <span class="kw">in</span> poles)<span class="op">/</span><span class="bu">len</span>(poles)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  head, <span class="op">*</span>rows <span class="op">=</span> <span class="bu">list</span>(src)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  data  <span class="op">=</span> _data(head, rows)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  poles <span class="op">=</span> projections(data)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> row <span class="kw">in</span> rows: row[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> _guess(row)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> data</span></code></pre></div>
+<h3 id="data-1">Data</h3>
 <p>Shared datasets from research papers by Apel [2], Chen <a
 href="#fn21" class="footnote-ref" id="fnref21"
 role="doc-noteref"><sup>21</sup></a>, and Menzies [^nair] are often used
@@ -996,19 +1161,19 @@ summary:</p>
 maximize and minimize.</li>
 </ul>
 <p>Data:</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> independent values          <span class="op">|</span> y <span class="op">=</span> dependent values</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">--------------------------------|----------------------</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  Spout_wait, Spliters, Counters, <span class="op">|</span> Throughput<span class="op">+</span>, Latency<span class="op">-</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">23075</span>,    <span class="fl">158.68</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22887</span>,    <span class="fl">172.74</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22799</span>,    <span class="fl">156.83</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>,        <span class="dv">3</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22430</span>,    <span class="fl">160.14</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    ...,      ...,      ...,           ...,    ...</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">10</span>,      <span class="op">|</span>   <span class="fl">460.81</span>,    <span class="fl">8761.6</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">18</span>,      <span class="op">|</span>   <span class="fl">402.53</span>,    <span class="fl">8797.5</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">12</span>,      <span class="op">|</span>   <span class="fl">365.07</span>,    <span class="fl">9098.9</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,        <span class="dv">1</span>,      <span class="op">|</span>   <span class="fl">310.06</span>,    <span class="dv">9421</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> independent values          <span class="op">|</span> y <span class="op">=</span> dependent values</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">--------------------------------|----------------------</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  Spout_wait, Spliters, Counters, <span class="op">|</span> Throughput<span class="op">+</span>, Latency<span class="op">-</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">23075</span>,    <span class="fl">158.68</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22887</span>,    <span class="fl">172.74</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>,        <span class="dv">6</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22799</span>,    <span class="fl">156.83</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>,        <span class="dv">3</span>,       <span class="dv">17</span>,      <span class="op">|</span>    <span class="dv">22430</span>,    <span class="fl">160.14</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    ...,      ...,      ...,           ...,    ...</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">10</span>,      <span class="op">|</span>   <span class="fl">460.81</span>,    <span class="fl">8761.6</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">18</span>,      <span class="op">|</span>   <span class="fl">402.53</span>,    <span class="fl">8797.5</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,       <span class="dv">12</span>,      <span class="op">|</span>   <span class="fl">365.07</span>,    <span class="fl">9098.9</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10000</span>,        <span class="dv">1</span>,        <span class="dv">1</span>,      <span class="op">|</span>   <span class="fl">310.06</span>,    <span class="dv">9421</span></span></code></pre></div>
 <p>Note that our data is much larger than the Table 3 example. The 39
 data sets in Table I have up to 86,000 rows, 88 independent variables,
 and three y goals. For the purposes of illustration, the rows in Table 3

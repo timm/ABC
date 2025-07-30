@@ -1,5 +1,5 @@
 ---
-title: "The EZRs of Easier AI"
+title: "Easier AI via Data Minign Algirithms Using/Used-by Optimizers"
 author:  "Tim Menzies<br>timm@ieee.org"
 date: "July, 2025"
 ---
@@ -15,59 +15,76 @@ _"Subtract."_ --Leidy Klotz
 ------------------------------------------------------
 
 ## Introduction
-
-Engineers do more, with less.  If any fool can do it for a dollar,
-engineers do it for a penny.  Engineers build systems that work for
-others: other  teams, other toolchains, and other time zones.  Its
-about systems that can endure (not just impress) long after the
-hype fades and which are understandable and auditable,  open to
-inspection and critique and improvement by others.
-
-So why settle for less from AI?  Must every task use opaque models
+Have we made AI too complicated? Are all AL tasks generative
+tasks that need 
+require expensive licenses to models
 rented  from someone else, feed by trillions of variables, requiring
-centruies of CPU?
+centruies of CPU? Or are their simpler methods, worthy of much active
+research?
+Clearly, not everything can be made simpler. Generative tasks need a large
+knowldge based on conditional probabilities in order to knw what to gnerate next.
+But not all tasks are generative tasks. And of those non-generative tasks,
+are there some that are very simple to code, easy to trai, fast to run?
 
-This question came up in a graduate AI class, when a student asked:
+This paper is about a tiny code based that implements explanation
+of active learning for multi-objective optimzaion problems.
+Having explore this area for over two deades. I can assert thatthere are many
+complex ways to adress explanaton, active learning, and optimization.
+Here, we step away from thos methods, seeking the simplest possible.
+
+This work began with a
+question for a graduate student in an AI class:
 
 > Why do our models need so much data?
 
 “Maybe they don’t,” I replied. “Maybe we just have not learned how
 to ask the right questions yet.”
 
-My claim led to a dare, which led to a prototype.  EZR sorts a few
-labelled examples into “best” and “rest”. A simple Bayes classifier
-decides what to look at next (EZR always grabs the next example
-that is  most likely to be “best” and least likely to be “rest”).
-After each labeling, EZR rebuilds “best” and “rest” models, and the
-cycle repeated.  After just a few dozen labellings, EZR  builds a
-regressions tree from the labeled examples. This summarizes the
-reasoning into a clear and compact explanation.
+My claim led to a dare which led to a prototype.  
+Given a database of past examples sorted in "best" and "rest"
+EZR is a Bayesian
+contrast set learner that prefers new examples
+if they are more likely to be best than rest. The most preferred example
+then updates "best" and "rest" and the cycle repeats.  At runtime,
+EZR avoids data that is noisey
+(i.e. is clearly not
+"best" or "rest") and  superfluous  (i.e. is not
+not relevant for "better" behavior). In this way it ignores most of the data and builds
+its models using just a few dozens samples. A regression tree learner uses those exampeles to build a tiny tree
+that not only explains how to acheive good results, but also what to do to imroe those results.
 
-To say the least, EZR is far simpler (and orders of magnitude faster)
-than alternatives like large language models, Gaussian Processes,
-or evolutionary reinforcement learning.  EZR is just 300 lines of
-Python and does not need heavy libraries like pandas or scikit-learn.
 
-But in a result supporting “less is more”, the first time we tried it,
-EZR found near-optimal car designs after labeling just 20–30 examples.
-Its decision tree could explain what was happening, enabling human
-understanding and critique.  Because it's so small, EZR is well-suited
-for teaching principles of AI and SE scripting. And because it's so
-fast to run and easy to modify, EZR is a productive tool for
-state-of-the-art research.
+EZR has been tested on  dozens problems from recent SE research papers that :
 
-This suprising success of EZR lead to another question:
+- Try to build design that minimize cost, defects, development time and mazimize functionality;
+- Select the magic control parameters that data miners use to guide thei learning (e.g. how many trees in a random forest?);
+- Configure cloud or database software
+- Predict the health of open source software rojects in one eyar's time; 
+- Optimize the management of software proects
+- And others.
 
-> “Was this just a fluke?  Was EZR just being tested one an  unusually
-easy problem?”
+We also look at other tasks:
 
-To test that, we went looking for harder problems. We gathered over
-110 real-world case studies from recent, peer-reviewed software
-engineering research—covering configuration optimization, architecture
-tuning, effort estimation, and more. Then we reran the experiment,
-at scale.  The results, shown below, demonstrated that EZR works
-remarkably well (quickly and effectively) for a broad range of
-problems taken from the SE literatures.
+- Select teams of good football players;
+- Retrain employees for a longer period of time;
+- Reduce student sdtop our fro school
+- Balance a pole on a cart
+- Decide which house to biy or loan applicant to approave
+- Predict life expectancy or predict patters or infectios diseases or patience re-admittance.
+- Design cars, select wine
+- Determine what advertising campaigns camight be successufl
+- And others.
+
+For these tasks, EZR was found to be effective at selecting optimal solutions.
+Its recommendations are completitove
+with alternate
+technologies Gaussian process models, reinforement learning, iterated racing etc etc. It
+also runs two to four orders of magnitude faster.
+
+Lastly, it has a tiny code base. This paper includes a complete source code listing for EZR. This code makes
+no use of complex Python packages like Pandas or scikit-learn. 
+Yet in under th300 lines it implements explanation
+of active learning for multi-objective optimzaion problems.
 
 This experience wuth EZR has  shifted our thinking. The  sucess of
 EZR  was not luck- it points to something deeper: an approach to
@@ -103,13 +120,6 @@ drive sales (even if, later,   that also drives up maintainance costs).
 
 [^chang74]: Chang, C. L. (1974). Finding Prototypes for Nearest Neighbor Classifiers. IEEE Transactions on Computers, C-23(11), 1179–1184.--
 
-
-In an attempt to halt, or at least slow, the complexity bloat of standard AI, 
-this document is about three things:
-
-- an idea: **less, but better**
-- a very small code base: **that operationalizes that idea**
-- and a large test suite: **that checks if the idea generalizes across diverse domains**
 
 Using this code and data, we ask five questions:
 

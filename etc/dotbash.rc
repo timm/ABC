@@ -57,6 +57,7 @@ alias reload="source '$Here/dotbash.rc' && echo ✅ dotbash.rc reloaded"
 
 # Only show banner in interactive shells
 if [[ $- == *i* ]]; then
+  clear
   bold=$(tput bold)
   col0=$(tput sgr0)
   col1=$(tput setaf 6)  # cyan
