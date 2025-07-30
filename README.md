@@ -15,22 +15,23 @@ _"Subtract."_ --Leidy Klotz
 ------------------------------------------------------
 
 ## Introduction
-Have we made AI too complicated? Are all AL tasks generative
-tasks that need 
-require expensive licenses to models
-rented  from someone else, feed by trillions of variables, requiring
+Have we made AI too complicated? Are all AI tasks generative
+tasks that 
+require expensive licenses of large  models
+feed by trillions of variables, requiring
 centruies of CPU? Or are their simpler methods, worthy of much active
 research?
 Clearly, not everything can be made simpler. Generative tasks need a large
 knowldge based on conditional probabilities in order to knw what to gnerate next.
 But not all tasks are generative tasks. And of those non-generative tasks,
-are there some that are very simple to code, easy to trai, fast to run?
+are there some that are very simple to code, easy to train, and fast to run?
 
-This paper is about a tiny code based that implements explanation
+To explore this issue,
+this paper is about a tiny code based that implements explanation
 of active learning for multi-objective optimzaion problems.
-Having explore this area for over two deades. I can assert thatthere are many
+Having explore this area for over two decades, I can assert that there are many
 complex ways to adress explanaton, active learning, and optimization.
-Here, we step away from thos methods, seeking the simplest possible.
+Here, we step away from thos methods, seeking very simple approaches.
 
 This work began with a
 question for a graduate student in an AI class:
@@ -40,8 +41,7 @@ question for a graduate student in an AI class:
 “Maybe they don’t,” I replied. “Maybe we just have not learned how
 to ask the right questions yet.”
 
-My claim led to a dare which led to a prototype.  
-Given a database of past examples sorted in "best" and "rest"
+My claim led to a dare which led to a prototype. Given a database of past examples sorted in "best" and "rest"
 EZR is a Bayesian
 contrast set learner that prefers new examples
 if they are more likely to be best than rest. The most preferred example
@@ -84,7 +84,9 @@ also runs two to four orders of magnitude faster.
 Lastly, it has a tiny code base. This paper includes a complete source code listing for EZR. This code makes
 no use of complex Python packages like Pandas or scikit-learn. 
 Yet in under th300 lines it implements explanation
-of active learning for multi-objective optimzaion problems.
+of active learning for multi-objective optimzaion problems. Such a small code base makes it useful
+material for teaching the basics of AI and SE scripting. We have also found it a productive
+workbench within which we can explore state-of-the-art research.
 
 This experience wuth EZR has  shifted our thinking. The  sucess of
 EZR  was not luck- it points to something deeper: an approach to
@@ -206,13 +208,11 @@ tree, left and right branches go best and worse examples. The
 left-most branch of that tree is shown here (and to get to any line
 in this tree, all the things abve it have to be true).
 
-```
-if crypt_blowfish == 0
-|  if memory_tables == 1
-|  |  if detailed_logging == 1
-|  |  |  if no_write_delay == 0; <== win=98%
-```
-
+    if crypt_blowfish == 0
+    |  if memory_tables == 1
+    |  |  if detailed_logging == 1
+    |  |  |  if no_write_delay == 0; <== win=98%
+    
 These four conditions select rows that vey clone
 (98%) to  optimial
 Note that this branch only mentions four
@@ -233,20 +233,17 @@ Note
 all the negative "wins" which is to say, if your goals are fast
 runtimes, do not `crypt_blowfish`.
 
-
-```
- #rows  win
-    17   68    if crypt_blowfish == 0
-     7   94    |  if memory_tables == 1
-     5   97    |  |  if detailed_logging == 1
-     4   98    |  |  |  if no_write_delay == 0;
-    10   49    |  if memory_tables == 0
-     7   51    |  |  if encryption == 0
-     5   50    |  |  |  if no_write_delay == 1
-     4   50    |  |  |  |  if txc_mvlocks == 0;
-     7 -165    if crypt_blowfish == 1
-     4  -51    |  if memory_tables == 1;
-```
+     #rows  win
+        17   68    if crypt_blowfish == 0
+         7   94    |  if memory_tables == 1
+         5   97    |  |  if detailed_logging == 1
+         4   98    |  |  |  if no_write_delay == 0;
+        10   49    |  if memory_tables == 0
+         7   51    |  |  if encryption == 0
+         5   50    |  |  |  if no_write_delay == 1
+         4   50    |  |  |  |  if txc_mvlocks == 0;
+         7 -165    if crypt_blowfish == 1
+         4  -51    |  if memory_tables == 1;
 
 (Aside: of course if security is an important goal then (a) add a
 "security+" column to the training data shown above; (b)  re-un
@@ -258,6 +255,12 @@ uncover nearly all the signal.  All of this took just a few dozen
 queries—and a few hundred lines of code. It’s a striking illustration
 of the Pareto principle:  **most of the value often comes from just
 a small fraction of the effort**.
+
+## Some Theory
+
+Tihis is acode-oreitend paper but before deving into the details,
+ot is usefuul to look at theintellectual origns of this work.
+
 
 
 ## Discussion

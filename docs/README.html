@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Tim Menzies timm@ieee.org" />
-  <title>The EZRs of Easier AI</title>
+  <title>Easier AI via Data Minign Algirithms Using/Used-by Optimizers</title>
   <style>
     html {
       color: #1a1a1a;
@@ -235,7 +235,8 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">The EZRs of Easier AI</h1>
+<h1 class="title">Easier AI via Data Minign Algirithms Using/Used-by
+Optimizers</h1>
 <p class="author">Tim Menzies<br>timm@ieee.org</p>
 <p class="date">July, 2025</p>
 </header>
@@ -260,53 +261,75 @@
 </tbody>
 </table>
 <h2 id="introduction">Introduction</h2>
-<p>Engineers do more, with less. If any fool can do it for a dollar,
-engineers do it for a penny. Engineers build systems that work for
-others: other teams, other toolchains, and other time zones. Its about
-systems that can endure (not just impress) long after the hype fades and
-which are understandable and auditable, open to inspection and critique
-and improvement by others.</p>
-<p>So why settle for less from AI? Must every task use opaque models
-rented from someone else, feed by trillions of variables, requiring
-centruies of CPU?</p>
-<p>This question came up in a graduate AI class, when a student
-asked:</p>
+<p>Have we made AI too complicated? Are all AI tasks generative tasks
+that require expensive licenses of large models feed by trillions of
+variables, requiring centruies of CPU? Or are their simpler methods,
+worthy of much active research? Clearly, not everything can be made
+simpler. Generative tasks need a large knowldge based on conditional
+probabilities in order to knw what to gnerate next. But not all tasks
+are generative tasks. And of those non-generative tasks, are there some
+that are very simple to code, easy to train, and fast to run?</p>
+<p>To explore this issue, this paper is about a tiny code based that
+implements explanation of active learning for multi-objective optimzaion
+problems. Having explore this area for over two decades, I can assert
+that there are many complex ways to adress explanaton, active learning,
+and optimization. Here, we step away from thos methods, seeking very
+simple approaches.</p>
+<p>This work began with a question for a graduate student in an AI
+class:</p>
 <blockquote>
 <p>Why do our models need so much data?</p>
 </blockquote>
 <p>“Maybe they don’t,” I replied. “Maybe we just have not learned how to
 ask the right questions yet.”</p>
-<p>My claim led to a dare, which led to a prototype. EZR sorts a few
-labelled examples into “best” and “rest”. A simple Bayes classifier
-decides what to look at next (EZR always grabs the next example that is
-most likely to be “best” and least likely to be “rest”). After each
-labeling, EZR rebuilds “best” and “rest” models, and the cycle repeated.
-After just a few dozen labellings, EZR builds a regressions tree from
-the labeled examples. This summarizes the reasoning into a clear and
-compact explanation.</p>
-<p>To say the least, EZR is far simpler (and orders of magnitude faster)
-than alternatives like large language models, Gaussian Processes, or
-evolutionary reinforcement learning. EZR is just 300 lines of Python and
-does not need heavy libraries like pandas or scikit-learn.</p>
-<p>But in a result supporting “less is more”, the first time we tried
-it, EZR found near-optimal car designs after labeling just 20–30
-examples. Its decision tree could explain what was happening, enabling
-human understanding and critique. Because it’s so small, EZR is
-well-suited for teaching principles of AI and SE scripting. And because
-it’s so fast to run and easy to modify, EZR is a productive tool for
-state-of-the-art research.</p>
-<p>This suprising success of EZR lead to another question:</p>
-<blockquote>
-<p>“Was this just a fluke? Was EZR just being tested one an unusually
-easy problem?”</p>
-</blockquote>
-<p>To test that, we went looking for harder problems. We gathered over
-110 real-world case studies from recent, peer-reviewed software
-engineering research—covering configuration optimization, architecture
-tuning, effort estimation, and more. Then we reran the experiment, at
-scale. The results, shown below, demonstrated that EZR works remarkably
-well (quickly and effectively) for a broad range of problems taken from
-the SE literatures.</p>
+<p>My claim led to a dare which led to a prototype. Given a database of
+past examples sorted in “best” and “rest” EZR is a Bayesian contrast set
+learner that prefers new examples if they are more likely to be best
+than rest. The most preferred example then updates “best” and “rest” and
+the cycle repeats. At runtime, EZR avoids data that is noisey (i.e. is
+clearly not “best” or “rest”) and superfluous (i.e. is not not relevant
+for “better” behavior). In this way it ignores most of the data and
+builds its models using just a few dozens samples. A regression tree
+learner uses those exampeles to build a tiny tree that not only explains
+how to acheive good results, but also what to do to imroe those
+results.</p>
+<p>EZR has been tested on dozens problems from recent SE research papers
+that :</p>
+<ul>
+<li>Try to build design that minimize cost, defects, development time
+and mazimize functionality;</li>
+<li>Select the magic control parameters that data miners use to guide
+thei learning (e.g. how many trees in a random forest?);</li>
+<li>Configure cloud or database software</li>
+<li>Predict the health of open source software rojects in one eyar’s
+time;</li>
+<li>Optimize the management of software proects</li>
+<li>And others.</li>
+</ul>
+<p>We also look at other tasks:</p>
+<ul>
+<li>Select teams of good football players;</li>
+<li>Retrain employees for a longer period of time;</li>
+<li>Reduce student sdtop our fro school</li>
+<li>Balance a pole on a cart</li>
+<li>Decide which house to biy or loan applicant to approave</li>
+<li>Predict life expectancy or predict patters or infectios diseases or
+patience re-admittance.</li>
+<li>Design cars, select wine</li>
+<li>Determine what advertising campaigns camight be successufl</li>
+<li>And others.</li>
+</ul>
+<p>For these tasks, EZR was found to be effective at selecting optimal
+solutions. Its recommendations are completitove with alternate
+technologies Gaussian process models, reinforement learning, iterated
+racing etc etc. It also runs two to four orders of magnitude faster.</p>
+<p>Lastly, it has a tiny code base. This paper includes a complete
+source code listing for EZR. This code makes no use of complex Python
+packages like Pandas or scikit-learn. Yet in under th300 lines it
+implements explanation of active learning for multi-objective optimzaion
+problems. Such a small code base makes it useful material for teaching
+the basics of AI and SE scripting. We have also found it a productive
+workbench within which we can explore state-of-the-art research.</p>
 <p>This experience wuth EZR has shifted our thinking. The sucess of EZR
 was not luck- it points to something deeper: an approach to software
 engineering and AI where, often, a few well-chosen examples outperform
@@ -438,15 +461,6 @@ little performance loss.</td>
 </tr>
 </tbody>
 </table>
-<p>In an attempt to halt, or at least slow, the complexity bloat of
-standard AI, this document is about three things:</p>
-<ul>
-<li>an idea: <strong>less, but better</strong></li>
-<li>a very small code base: <strong>that operationalizes that
-idea</strong></li>
-<li>and a large test suite: <strong>that checks if the idea generalizes
-across diverse domains</strong></li>
-</ul>
 <p>Using this code and data, we ask five questions:</p>
 <ul>
 <li><p><strong>RQ1: Is EZR simple?</strong><br />
@@ -519,10 +533,11 @@ constructs a binary regression tree from those 24 examples. In that
 tree, left and right branches go best and worse examples. The left-most
 branch of that tree is shown here (and to get to any line in this tree,
 all the things abve it have to be true).</p>
-<pre><code>if crypt_blowfish == 0
-|  if memory_tables == 1
-|  |  if detailed_logging == 1
-|  |  |  if no_write_delay == 0; &lt;== win=98%</code></pre>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> crypt_blowfish <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>  <span class="cf">if</span> memory_tables <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> detailed_logging <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>  <span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> no_write_delay <span class="op">==</span> <span class="dv">0</span><span class="op">;</span> <span class="op">&lt;==</span> win<span class="op">=</span><span class="dv">98</span><span class="op">%</span></span></code></pre></div>
 <p>These four conditions select rows that vey clone (98%) to optimial
 Note that this branch only mentions four options, and two of those are
 all about what to turn off. That is to say, even though this databased
@@ -538,128 +553,106 @@ attack the database’s security. The full tree generted by EZR shows what
 happens this feature is enabled. (see the last two lines). Note all the
 negative “wins” which is to say, if your goals are fast runtimes, do not
 <code>crypt_blowfish</code>.</p>
-<pre><code> #rows  win
-```python
-17   68    if crypt_blowfish == 0
- 7   94    |  if memory_tables == 1
- 5   97    |  |  if detailed_logging == 1
- 4   98    |  |  |  if no_write_delay == 0;
-10   49    |  if memory_tables == 0
- 7   51    |  |  if encryption == 0
- 5   50    |  |  |  if no_write_delay == 1
- 4   50    |  |  |  |  if txc_mvlocks == 0;
- 7 -165    if crypt_blowfish == 1
- 4  -51    |  if memory_tables == 1;</code></pre>
-<pre><code>
-(Aside: of course if security is an important goal then (a) add a
-&quot;security+&quot; column to the training data shown above; (b)  re-un
-EZR; (c) check what are the mpracts of that additional goal.)
-
-EZR shows that with the right strategy, a handful of examples 
-(in this case, 24) can
-uncover nearly all the signal.  All of this took just a few dozen
-queries—and a few hundred lines of code. It’s a striking illustration
-of the Pareto principle:  **most of the value often comes from just
-a small fraction of the effort**.
-
-
-## Discussion
-
-Before looking at the code, we address the questions often asked about the above exampel?
-
-### Why not label everything?
-
-The above code assumed we can only label 24 our of 800 examples. Why do that?
-
-Well, labeling is costly:
-
-- Benchmarks take time to run.
-- Some configurations require complex rebuilds.
-- Human evaluation is slow, expensive, and error-prone.
-
-Prior work has shown that even with big compute, building labeled
-datasets takes **months or years**. EZR sidesteps this by labeling
-only what matters most.
-
-
-### So how does EZR help?
-
-EZR operates under a **tiny-AI assumption**: most of the signal is
-buried under a layer of irrelevant or redundant data. It was inspred
-byt George Kelly&#39;s Personal Construct Theory (from the 1950s) that
-stressed the value of contrast set learning to  recognize what is
-different between concepts.
-
-Modern versions of contrast set learning include various rule-based
-learners including our own previous work on TAR3 and WHICH. EZR&#39;s
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#rows  win</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">17</span>   <span class="dv">68</span>    <span class="cf">if</span> crypt_blowfish <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>     <span class="dv">7</span>   <span class="dv">94</span>    <span class="op">|</span>  <span class="cf">if</span> memory_tables <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="dv">5</span>   <span class="dv">97</span>    <span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> detailed_logging <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="dv">4</span>   <span class="dv">98</span>    <span class="op">|</span>  <span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> no_write_delay <span class="op">==</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">10</span>   <span class="dv">49</span>    <span class="op">|</span>  <span class="cf">if</span> memory_tables <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     <span class="dv">7</span>   <span class="dv">51</span>    <span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> encryption <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="dv">5</span>   <span class="dv">50</span>    <span class="op">|</span>  <span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> no_write_delay <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     <span class="dv">4</span>   <span class="dv">50</span>    <span class="op">|</span>  <span class="op">|</span>  <span class="op">|</span>  <span class="op">|</span>  <span class="cf">if</span> txc_mvlocks <span class="op">==</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>     <span class="dv">7</span> <span class="op">-</span><span class="dv">165</span>    <span class="cf">if</span> crypt_blowfish <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>     <span class="dv">4</span>  <span class="op">-</span><span class="dv">51</span>    <span class="op">|</span>  <span class="cf">if</span> memory_tables <span class="op">==</span> <span class="dv">1</span><span class="op">;</span></span></code></pre></div>
+<p>(Aside: of course if security is an important goal then (a) add a
+“security+” column to the training data shown above; (b) re-un EZR; (c)
+check what are the mpracts of that additional goal.)</p>
+<p>EZR shows that with the right strategy, a handful of examples (in
+this case, 24) can uncover nearly all the signal. All of this took just
+a few dozen queries—and a few hundred lines of code. It’s a striking
+illustration of the Pareto principle: <strong>most of the value often
+comes from just a small fraction of the effort</strong>.</p>
+<h2 id="discussion">Discussion</h2>
+<p>Before looking at the code, we address the questions often asked
+about the above exampel?</p>
+<h3 id="why-not-label-everything">Why not label everything?</h3>
+<p>The above code assumed we can only label 24 our of 800 examples. Why
+do that?</p>
+<p>Well, labeling is costly:</p>
+<ul>
+<li>Benchmarks take time to run.</li>
+<li>Some configurations require complex rebuilds.</li>
+<li>Human evaluation is slow, expensive, and error-prone.</li>
+</ul>
+<p>Prior work has shown that even with big compute, building labeled
+datasets takes <strong>months or years</strong>. EZR sidesteps this by
+labeling only what matters most.</p>
+<h3 id="so-how-does-ezr-help">So how does EZR help?</h3>
+<p>EZR operates under a <strong>tiny-AI assumption</strong>: most of the
+signal is buried under a layer of irrelevant or redundant data. It was
+inspred byt George Kelly’s Personal Construct Theory (from the 1950s)
+that stressed the value of contrast set learning to recognize what is
+different between concepts.</p>
+<p>Modern versions of contrast set learning include various rule-based
+learners including our own previous work on TAR3 and WHICH. EZR’s
 variant on contrast set learning throws away most of that architecture
-and repalces it with a simple two-class classification approach.
-Tables of data describing the &quot;best&quot; and &quot;rest&quot; examples can compute
-the likilihoods _b,r_ of of an as-yet-unclassified example belonging
-to &quot;best&quot; or &quot;rest&quot;. The next example to label is the one that
-maximizes some _acquisiton function_ e.g. _b/r_.
-
-### What is New About EZR?
-
-This work builds upon the foundation laid by prior resarch, but it
-removes some key barriers  that limits the practical use of thsose
-methods.
-
-Often we are asked &quot;if EZR just&#39; simplifies existing methods, it
-is worthy of publciation?&quot;. If so many past resarechers have explored
-simplifty (see Table 1), what is new and itneresting about EZR?
-
-In reply, we say offer the observation that propr simplicity results
-are alomst uneirsally ignored.  Each year we interview dozens of
+and repalces it with a simple two-class classification approach. Tables
+of data describing the “best” and “rest” examples can compute the
+likilihoods <em>b,r</em> of of an as-yet-unclassified example belonging
+to “best” or “rest”. The next example to label is the one that maximizes
+some <em>acquisiton function</em> e.g. <em>b/r</em>.</p>
+<h3 id="what-is-new-about-ezr">What is New About EZR?</h3>
+<p>This work builds upon the foundation laid by prior resarch, but it
+removes some key barriers that limits the practical use of thsose
+methods.</p>
+<p>Often we are asked “if EZR just’ simplifies existing methods, it is
+worthy of publciation?”. If so many past resarechers have explored
+simplifty (see Table 1), what is new and itneresting about EZR?</p>
+<p>In reply, we say offer the observation that propr simplicity results
+are alomst uneirsally ignored. Each year we interview dozens of
 propsectivegraduate students for our reserch labs. We also interact,
-extensively, with industrial pracitioners and many other researchers
-at conferences.  Nearly unviersally, when faced with any new AI
-problem, thei default action is to reach for some alrge language
-model or deep learning solution.
-
-simplification research is valid resaerch.
-A persistant human congintive basi is to under-value subtractive impormvents.
-Klotz et al. report nmueris studies where
-
-case studis where hmans are given patterns on a chess baord, then asked to change the pattern in order to make it more symmetrical.
-OVerhwlemmning, humans prefer to add new squares to the pattern, rather than take squares away. 
-
-As Klotz et al. warns:
-
-&gt; &quot;Defaulting to searches for additive changes may be one reason
-that people struggle to mitigate overburdened schedules, institutional red tape
-and damaging effects on the planet.&quot;
-
-### Why use a decision tree?
-
-Decision trees are:
-
-- **Fast to train**  
-- **Sparse by nature**  
-- **Easy to read**
-
-As physicist Ernest Rutherford famously quipped:  
-&gt; “A theory that you can’t explain to a bartender is probably no damn good.”
-
-Each path in the tree offers a **human-readable recipe for improvement**, grounded in real measurements.
-
-
-### How is “win” defined?
-
-Each row has _n_ goals that  we are trying to minimize or maximize. In
-the labelled data, each
-goal column has a min and max value
-seen so far.  After normalizng each goal has the value 0..1 (for min..max),
-we can say that minimizing goals have a best value of &quot;0&quot; and
-maximizing goals have a best value of &quot;1&quot;.
-</code></pre>
-<p>y(row) = sqrt(sum(abs(norm(goal) - goal.most)^2 for goal in
-cols.y))</p>
-<pre><code>
-We normalize utility as:
-
-```python
-win = 100 × (1 - (mean(y) - best) / (median - best))</code></pre>
+extensively, with industrial pracitioners and many other researchers at
+conferences. Nearly unviersally, when faced with any new AI problem,
+thei default action is to reach for some alrge language model or deep
+learning solution.</p>
+<p>simplification research is valid resaerch. A persistant human
+congintive basi is to under-value subtractive impormvents. Klotz et
+al. report nmueris studies where</p>
+<p>case studis where hmans are given patterns on a chess baord, then
+asked to change the pattern in order to make it more symmetrical.
+OVerhwlemmning, humans prefer to add new squares to the pattern, rather
+than take squares away.</p>
+<p>As Klotz et al. warns:</p>
+<blockquote>
+<p>“Defaulting to searches for additive changes may be one reason that
+people struggle to mitigate overburdened schedules, institutional red
+tape and damaging effects on the planet.”</p>
+</blockquote>
+<h3 id="why-use-a-decision-tree">Why use a decision tree?</h3>
+<p>Decision trees are:</p>
+<ul>
+<li><strong>Fast to train</strong><br />
+</li>
+<li><strong>Sparse by nature</strong><br />
+</li>
+<li><strong>Easy to read</strong></li>
+</ul>
+<p>As physicist Ernest Rutherford famously quipped:<br />
+&gt; “A theory that you can’t explain to a bartender is probably no damn
+good.”</p>
+<p>Each path in the tree offers a <strong>human-readable recipe for
+improvement</strong>, grounded in real measurements.</p>
+<h3 id="how-is-win-defined">How is “win” defined?</h3>
+<p>Each row has <em>n</em> goals that we are trying to minimize or
+maximize. In the labelled data, each goal column has a min and max value
+seen so far. After normalizng each goal has the value 0..1 (for
+min..max), we can say that minimizing goals have a best value of “0” and
+maximizing goals have a best value of “1”.</p>
+<pre><code>y(row) = sqrt(sum(abs(norm(goal) - goal.most)^2 for goal in cols.y))</code></pre>
+<p>We normalize utility as:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>win <span class="op">=</span> <span class="dv">100</span> × (<span class="dv">1</span> <span class="op">-</span> (mean(y) <span class="op">-</span> best) <span class="op">/</span> (median <span class="op">-</span> best))</span></code></pre></div>
 <ul>
 <li>A win of <strong>100</strong> means we match the best.<br />
 </li>
