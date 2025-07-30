@@ -45,7 +45,7 @@ docs/%.html : %.md
 	--line-numbers=1           \
 	--pro=color                 \
 	--pretty=python              \
-	--chars-per-line=80           \
+	--chars-per-line=90           \
 	--left-title=""                \
 	--borders=no                    \
   --right-footer='page %s. of %s#' \
@@ -57,5 +57,20 @@ docs/%.html : %.md
 
 #------------------------------
 
-lite1:
-	for f in ../moot/optimize/*/*.csv; do (python3 -B lite.py -f $$f --likely &); done | tee ~/tmp/$@
+lite20:
+	mkdir -p ~/tmp
+	time ls -r ../moot/optimize/*/*.csv \
+	  | xargs -P 32 -n 1 -I{} sh -c 'python3 -B ezr.py -f "{}" --likely' \
+	  | tee ~/tmp/$@.log
+	@echo "now call make lite20report"
+
+lite20z:
+	cat ~/tmp/lite20.log  \
+		| awk '{print $$1, $$1-$$2, $$1-$$3, $$1-$$4}' \
+		| sort -n \
+		| awk 'BEGIN {print "klass diff_xplore diff_xploit diff_adapt"} \
+		             {print} \
+		             {x+=$$2; X+=$$3; a+=$$4} \
+					 END   {print x/NR,X/NR,a/NR> "/dev/stderr"}' \
+		| python3 $(Top)/etc/lite20z.py
+

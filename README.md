@@ -429,9 +429,10 @@ EZR demonstrates how to teach and practice software engineering grounded in:
 
 To understand the code, first we have to understand the data it processess.
 Here's a typical input file.
-Here, the  goal to is
-to tune Spout wait, Spliters, Counters in order to achieve the
-best Throughput/Latency. 
+In this example, the goal is to
+to tune Spout wait, Spliters, Counters in order to maximize
+Throughput (marked with a ``+'') and minimze Latency (marked
+with a ``-'').
 
 
       x = independent values          | y = dependent values
@@ -474,9 +475,84 @@ good goals at least cost (i.e. fewest labels).
 
 ## Structs
 
-When this table is read by EZR, it is turns into a `Data`
-stuct which contains `rows`, which are sumamrized in `cols`
-(columns). Columns are either `Num`s (numeric) or `Sym` (symbolic).
+EZR does not use Python classes since this lets use spread
+functionalty of structs over multiple files (this is useful since,
+it lets place arcane detail out of the way of the simpler stuff). Instead,
+its structs are based on `SimpleNamespace` objects that can pretty print
+themselves, and which allow access to content via the standard dot notation.
+
+    from types import SimpleNamespace as o
+
+In EZR, rows of data are summarized into `
+`Num`s (numeric) or `Sym` (symbolic) columns.
+Each column knows the `txt` of its name  and its column position
+(in `at`). `Sym`s keep a count of the symbols seen so far
+(in `has`). 
+
+    def Sym(at=0, txt=""): 
+      return o(it=Sym, at=at, txt=txt, has={})
+
+`Num`s also keep track of the smallest and largest
+number seen so far (`lo`, `hi`)  as well as the mean `mu` and
+standard devaition `sd`. Further, `Num`s also know if they
+are a goal that needs minimization (if the last letter of its name
+is `-`, then _better_ values are _smaller_).
+
+    def Num(at=0, txt=" "): 
+      return o(it=Num, at=at, txt=txt, lo=1e32, mu=0, m2=0, sd=0, n=0, 
+               hi=-1e32, more = 0 if txt[-1] == "-" else 1)
+
+`Num`s and `Syms` are generated from the names on row1 of
+the  data. Upper case names generated `Num`s and other names
+are `Sym`s. Columns have different roles; e.g. if their name ends in `+-` then
+they are part
+of the 
+dependent output variables `y`. Otherwise, they are part of the
+`x` indepdentent 
+inputs. Apart from that, they are also present in the list of `all` columns. 
+
+     def Cols(names):
+       all, x, y, klass = [],[],[],None
+       for c,s in enumerate(names):
+         all += [(Num if s[0].isupper() else Sym)(c,s)]
+         if s[-1] == "X": continue
+         if s[-1] == "!": klass = all[-1]
+         (y if s[-1] in "!-+" else x).append(all[-1])
+       return o(it=Cols, names=names, all=all, x=x, y=y, klass=klass)
+     
+(Note if a column name ends in `X`
+it should be skiiped by the inference. `Cols` implments this by skipping
+over such columns and not adding them to the `x` or `y` roles.)
+
+All these columns, and their associated ros
+are stored within
+a `Data`. This is just a set of `rows` and their sumamries in `cols`.
+The first item in a input `src` of information is grabbed and used
+by `COls` to create a list of `cols` (columns). Any remaining
+items within that src are then added to the `Data` struct.
+
+    def Data(src):
+      src = iter(src)
+      return adds(src, o(it=Data, n=0, rows=[], cols= Cols(next(src))))
+
+    def adds(src, it=None):
+       "A handy helper function for adding many values to some struct."
+      it = it or Num()
+      [add(it, x) for x in src]
+      return it
+
+
+import random, math, sys, re
+
+def atom(s):
+  for fn in [int,float]:
+    try: return fn(s)
+    except Exception as _: pass
+  s = s.strip()
+  return {'True':True,'False':False}.get(s,s)
+
+the = o(**{k:atom(v) for k,v in re.findall(r"(\w+)=(\S+)",__doc__)})
+
 
 
 ## Code
