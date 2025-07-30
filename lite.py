@@ -18,41 +18,37 @@ the=o(acq="klass",
 
 #--------------------------------------------------------------------
 def adds(it,src): [add(it,x) for x in src]; return it
+big=1e31
 
 def Data(src):
   src  = iter(src)
-  data = o(ok=0, rows=[], names=next(src))
-  data.cols = [[] for _ in data.names]
-  return adds(data, src)
+  return adds(o(cols=Cols(next(src),rows=[]), src))
+
+def Cols(names)
+  y = {}
+  for c,s in enumerate(names):
+    if s[0].isupper(): nums[c] = (big,-big)
+    if   s[-1]=="X": continue
+    if   s[-1] in "-" y[c] = 0
+    elif s[-1] in "+" y[c] = 1
+  data = o(y=y, names=names,  nums=nuns, rows=rows)
 
 def clone(data, rows=None):
-  return adds(Data([data.names]), rows or [])
+  return adds(Data([data.cols.names]), rows or [])
 
 def add(data, row):
-  [c.append(x) for c,x in zip(data.cols,row) if x != "?"]
   data.rows += [row]
-  data.ok = False
+  for c,v in enumerate(row):
+    if v != "?" and c in data.cols.nums:
+      lo,hi = data.cols.nums[v] 
+      data.cols.nums[v] = (min(v,lo), max(v,hi))
   return row
 
-def sub(data, row, zap=False):
-  print([c for c,x in zip(data.cols,row) if x != "?"])
-  [c.pop(pos(c,x)) for c,x in zip(data.cols,row) if x != "?"]
-  if zap: data.rows.remove(row)
-  return row
+def norm(x,lo,hi): return (x - lo) / (hi - lo + 1e-32)
 
-def per(data,c,x): 
-  c=ok(data).cols[c]; return pos(c,x) / len(c) 
-
-def bin(data,c,x): 
-  b=int(per(data,c,x)*the.bins); return min(b,the.bins-1)
-
-def norm(data,c,x): 
-  lo,*_,hi = ok(data).cols[c]; return (x-lo)/(hi-lo+1e-32)
-
-def ok(data):
-  if not data.ok: [col.sort() for col in data.cols]
-  data.ok=True
-  return data
+def disty(data,row):
+  fn = lambda c: abs(norm(row[c],**data.cols.nums[c]) - data.cols.y[c])**2
+  return (sum(fn(c) for c in data.cols.y) / len(data.cols.y))**.5
 
 #--------------------------------------------------------------------
 def atom(s):
