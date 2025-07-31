@@ -1,4 +1,6 @@
-Recently, AI has gotten very complcaited.  The models themselves
+# Why? What?
+
+Recently, AI has gotten very complicated.  The models themselves
 are opaque and  hard to understand or audit or repair.  The CPU
 required to build and use them severely limits experimentation. It
 also complicates industrial deployment and teaching.
@@ -7,9 +9,9 @@ But are all problems inherently complex and need, say, generative
 AI and large language models?  _Tiny AI_ performs _predictive AI
 from small models_ and handles tasks like optimization and regression.
 As shown here, tiny AI can be remarkable effective, yet simple to
-code, and need only a few dozen labelled examples. to train.
+code, and need only a few dozen labeled examples for training.
 
-Tiny AI methods are routinely ignored in resaerch and industry.  In
+Tiny AI methods are routinely ignored in research and industry.  In
 a recent systematic review [^hou24] of 229 SE papers using large
 language models (LLMs), only 13/229 (about 5%) of those papers
 compared LLMs to other approaches. This is a methodological error
@@ -26,8 +28,8 @@ faster (See Table 1)
 |2024 [^somv24] | Ditto |
 |2022 [^taw23] | Predictive AI did better for management for agile software development. |
 |2018 [^maju18] | Simple clustering plus predictive AI did better for text mining. | 
-|2024 [^ling24] | Predicve AI did better for data synthesis. |
-| 2024 [^john24] | Long list of errors seen in generataive AI for software engineering. |
+|2024 [^ling24] | Predictive AI did better for data synthesis. |
+| 2024 [^john24] | Long list of errors seen in generative AI for software engineering. |
 
 Perhaps the reason Tiny AI is ignored is that there is no simple
 reference package, nor documentation of its effectiveness.  To
@@ -72,7 +74,7 @@ after sampling just a few dozen examples.
 - A criticism of other work that has never checked complicated a simple idea; 
 
 
-For an example where this tool can dramatically simplfy prior resutls, see the end of this document.
+For an example where this tool can dramatically simplify prior results, see the end of this document.
 
 [^moot]: http://github.com/timm/moot
 
