@@ -20,7 +20,7 @@ Perhaps the reason Tiny AI is ignored is that there is no simpel
 reference package, nor documentation of its effectiveness.  To
 remedy that, we offer the EZR python paclage, accessible via
 
-   pip install ezr
+     pip install ezr
 
 EZR is very short (a few hundred lines of Python; no use of complex
 packages like pandas or scikit-learn). We offer it here as
