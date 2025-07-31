@@ -18,7 +18,7 @@ Firstly, we wills ay best means "distance to heaven"; i.e.
 if each example achieves goals $g1,g2,...$ and 
 the best valuse for each goal are $n1,n2,..$ then
 
-$$y= \sigma_i(N(abs(g_i-n_i))^2) / len(goals)$$
+$$y= \sum_i(N(abs(g_i-n_i))^2) / len(goals)$$
 
 where `N` normalizes our goals values 0..1.
 
