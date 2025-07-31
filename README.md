@@ -24,7 +24,7 @@ faster (See Table 1)
 |--------------|-----|
 |2022 [^grin22] | Large language models may not be the best choice for tabular data. |
 |2024 [^somv24] | Ditto |
-|2022 [^tawosi23] | Predictive AI did better for management for agile software development. |
+|2022 [^taw23] | Predictive AI did better for management for agile software development. |
 |2018 [^maju18] | Simple clustering plus predictive AI did better for text mining. | 
 |2024 [^ling24] | Predicve AI did better for data synthesis. |
 | 2024 [^john24] | Long list of errors seen in generataive AI for software engineering. |
@@ -90,7 +90,7 @@ For an example where this tool can dramatically simplfy prior resutls, see the e
 
 [^maju18]: Majumder, S., Balaji, N., Brey, K., Fu, W., & Menzies, T. (2018, May). 500+ times faster than deep learning: A case study exploring faster methods for text mining stackoverflow. In Proceedings of the 15th International Conference on Mining Software Repositories (pp. 554-563).
 
-[^tawoi23]: V. Tawosi, R. Moussa, and F. Sarro, “Agile effort
+[^taw23]: V. Tawosi, R. Moussa, and F. Sarro, “Agile effort
 estimation: Have we solved the problem yet? insights from a replication
 study,” IEEE Transactions on Software Engineering, vol. 49, no. 4,
 pp. 2677– 2697, 2023.
