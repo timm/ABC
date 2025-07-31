@@ -107,19 +107,19 @@ setting impacts performance is daunting.
 When manual reasoning fails, we can ask AI to help.  Imagine we
 have a log of 800+ configurations, each showing the measured effects
 of settings to dozens of control settings (shown here as x1,x2,x3...).
-Some settings lead to excellent results (which we have marked
-with "best") and some do not (see the "rest").
 
 ```
 choices                     Effects
 ----------------            -----------------------
 x1,x2,x3,x4,x4,x5,...  →  Energy-,    time-,  cpu-
 0,0,0,0,1,0,...               6.6,    248.4,   2.1   ← best
-0,1,1,0,1,0,...               6.6,    250,     2.0   <- best
-0,1,0,1,1,1,...              14.7,    510.8,  13.0   <- rest
+0,1,1,0,1,0,...               6.6,    250,     2.0   ← best
+0,1,0,1,1,1,...              14.7,    510.8,  13.0   ← rest
 1,1,0,1,1,1,...              16.8,    518.6,  14.1   ← rest
 ...
 ```
+Note the "best" fast and energy efficient rows
+appear on top (while the "rest" are slower and more energy hungry).
 
 We say the better examples are those that are "closer to heaven";
 i.e.  if each example achieves goals $g1,g2,...$; and the best
@@ -130,22 +130,20 @@ $$d_y= \sqrt{\left(\sum_i N(abs(g_i-n_i))^2\right) / len(goals)}$$
 
 where `N` normalizes our goals values min..max as 0..1  The closer to heaven,
 the better the example so we say _smaller_ $h$ values are _better_.
- To simplify the reporting, we define _optimal_ to
+Using $d_y$, a list of examples seen-so-far can be sorted into
+a small "best" set and a larger "rest" set. For example,  the four rows
+shown above are sorted by $d_y$. 
+
+To simplify the reporting, we define _optimal_ to
 be the labeled example that is closest to heaven (i.e. has the smallest $d_y$ values).
-If $\hat{d_y}$ is the mean $d_y$ of all the rows, and $d_{h}^0$ comes from the optimal
+If $\overline{d_y}$ is the mean $d_y$ of all the rows, and $d_{h}^0$ comes from the optimal
 row, and our optimizer returns a row with a  score $d_h^1$ then the  _win_
 of that estimation is the normalized distance from mean to best:
 
-$$win = 100\left(1- \frac{d_h^1 - d_y^0}{\hat{d_y}-d_y^0}\right)$$
+$$win = 100\left(1- \frac{d_h^1 - d_y^0}{\overline{d_y}-d_y^0}\right)$$
 
-Note that a win of 100 means "we have reached the optimal" and a win less than 0 means
+A win of 100 means "we have reached the optimal" and a win less than 0 means
 an optimization failure (since we are finding solutions worse than before.
-
-Using $d_y$, a list of examples seen-so-far can be sorted into
-a small "best" set and a larger "rest" set. For example,  the four rows
-shown above are sorted by $d_y$. Note the fast and energy efficient rows
-appear on top while the slower, energy hungry, rows appear below.
-
 
 Any number of AI tools could learn what separates “best” from “rest.”
 But here's the challenge: **labeling** each configuration (e.g.,
