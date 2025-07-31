@@ -22,7 +22,7 @@ ezr.py, multi objective.
  -m  m=2             Bayes hack for rare attributes
  -p  p=2             distance calculation coefficient
  -s  seed=1234567891 random number seed
- -f  file=../moot/optimize/misc/auto93.csv
+ -f  file=../../moot/optimize/misc/auto93.csv
                      path to CSV file
 
  -h                  show help
