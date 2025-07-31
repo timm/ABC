@@ -119,17 +119,17 @@ x1,x2,x3...   →            Energy-, time-,  cpu-
 We say the better examples are those that are "closer to heaven";
 i.e.  if each example achieves goals $g1,g2,...$; and the best
 values ever seen for  each goal is $n1,n2,..$; then distance to
-heaven is
+heaven is the Euclidean distance to the best values:
 
-$$y= \sqrt{\left(\sum_i(N(abs(g_i-n_i))^2\right) / len(goals)}$$
+$$y= \sqrt{\left(\sum_i N(abs(g_i-n_i))^2\right) / len(goals)}$$
 
-where `N` normalizes our goals values 0..1. The closer to heaven,
+where `N` normalizes our goals values min..max as 0..1  The closer to heaven,
 the better the example so we say _smaller_ $y$ values are _better_.
  To simplify the reporting, we define _optimal_ to
 be the labeled example that is closest to heaven (i.e. has the smallest $y$ values).
 If $\hat{y}$ is the mean $y$ of all the rows, and $y_0$ comes from the optimal
 row, and our optimizer returns a row with a  score $y_1$ then the  _win_
-of that estimation is
+of that estimation is the normalized distance from mean to best:
 
 $$win = 100\left(1- \frac{y_1 - y_0}{\hat{y}-y_0}\right)$$
 
