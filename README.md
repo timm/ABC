@@ -137,10 +137,10 @@ shown above are sorted by $d_y$.
 To simplify the reporting, we define _optimal_ to
 be the labeled example that is closest to heaven (i.e. has the smallest $d_y$ values).
 If $\overline{d_y}$ is the mean $d_y$ of all the rows, and $d_{h}^0$ comes from the optimal
-row, and our optimizer returns a row with a  score $d_h^1$ then the  _win_
+row, and our optimizer returns a row with a  score $d_y$ then the  _win_
 of that estimation is the normalized distance from mean to best:
 
-$$win = 100\left(1- \frac{d_h^1 - d_y^0}{\overline{d_y}-d_y^0}\right)$$
+$$win = 100\left(1- \frac{d_y - d_y^0}{\overline{d_y}-d_y^0}\right)$$
 
 A win of 100 means "we have reached the optimal" and a win less than 0 means
 an optimization failure (since we are finding solutions worse than before.
