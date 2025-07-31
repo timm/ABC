@@ -22,7 +22,9 @@ vim.opt.tabstop = 2
 vim.opt.scrolloff = 3
 vim.opt.cursorline = true
 vim.opt.hidden = true
-vim.keymap.set('n', 'Q', ':qall<CR>')
+vim.g.mapleader = " "
+vim.keymap.set('n', '<leader>q', ':qall<CR>', { noremap = true, silent = true })
+
 
 
 -- Search
@@ -36,4 +38,15 @@ vim.opt.clipboard = "unnamedplus"
 vim.cmd("syntax enable")
 vim.opt.background = "dark"
 vim.cmd("colorscheme sorbet")
+
+-- Spelling
+vim.keymap.set('n', '<F3>', function()
+  if vim.opt.spell:get() then
+    vim.opt.spell = false
+  else
+    vim.opt.spell = true
+    vim.opt.spelllang = { 'en_us' }
+  end
+end, { noremap = true, silent = true })
+
 
