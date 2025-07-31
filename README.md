@@ -31,9 +31,26 @@ faster (See Table 1)
 
 Perhaps the reason Tiny AI is ignored is that there is no smple
 reference package, nor documentation of its effectiveness.  To
-remedy that, we offer the EZR python paclage, accessible via
+remedy that, we offer the EZR python pakcage, accessible via
 
      pip install ezr
+
+EZR is an explanation system for incremental multi-objective optimization. 
+This tool sorts and splits the examples seen so far into two lists:
+a small "best" list and the remaining "rest".
+New
+examples
+are explored if they are more likely to be best than rest. The most preferred example
+then updates "best" and "rest" and the cycle repeats.  At runtime,
+EZR avoids data that is noisey
+(i.e. is clearly not
+"best" or "rest") and  superfluous  (i.e. is not
+not relevant for "better" behavior). In this way it ignores most of the data and builds
+its models using just a few dozens samples. Hence,
+a regression tree learned from these examples
+offers a tiny explanation of
+how to acheive good results (and  also what to do to improve those results).
+
 
 EZR is very short (a few hundred lines of Python; no use of complex
 packages like pandas or scikit-learn). 
