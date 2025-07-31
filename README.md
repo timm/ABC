@@ -1,4 +1,6 @@
-# Why? What?
+# A Tiny AI Minifesto
+
+<img src="docs/ezr.png" align=righ width=400>
 
 Recently, AI has gotten very complicated.  The models themselves
 are opaque and  hard to understand or audit or repair.  The CPU
