@@ -121,7 +121,7 @@ i.e.  if each example achieves goals $g1,g2,...$; and the best
 values ever seen for  each goal is $n1,n2,..$; then distance to
 heaven is
 
-$$y= \sum_i(N(abs(g_i-n_i))^2) / len(goals)$$
+$$y= \sqrt{\sum_i(N(abs(g_i-n_i))^2) / len(goals)}$$
 
 where `N` normalizes our goals values 0..1. The closer to heaven,
 the better the example so we say _smaller_ $y$ values are _better_.
