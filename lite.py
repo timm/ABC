@@ -25,8 +25,9 @@ def Data(src):
   return adds(o(cols=Cols(next(src),rows=[]), src))
 
 def Cols(names)
-  y = {}
+  y,all = {},{} 
   for c,s in enumerate(names):
+    all[c] = []
     if s[0].isupper(): nums[c] = (big,-big)
     if   s[-1]=="X": continue
     if   s[-1] in "-" y[c] = 0
@@ -47,7 +48,7 @@ def add(data, row):
 def norm(x,lo,hi): return (x - lo) / (hi - lo + 1e-32)
 
 def disty(data,row):
-  fn = lambda c: abs(norm(row[c],**data.cols.nums[c]) - data.cols.y[c])**2
+  fn=lambda c: abs(norm(row[c],**data.cols.nums[c])-data.cols.y[c])**2
   return (sum(fn(c) for c in data.cols.y) / len(data.cols.y))**.5
 
 #--------------------------------------------------------------------
