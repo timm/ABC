@@ -7,8 +7,8 @@ are opaque and  hard to understand or audit or repair.  The CPU
 required to build and use them severely limits experimentation. It
 also complicates industrial deployment and teaching.
 
-But are all problems inherently complex and need, say, generative
-AI and large language models?  _Tiny AI_ performs _predictive AI
+But are all problems inherently complex? Must generative
+AI and large language models by used for all reasoning? Perhaps not.  _Tiny AI_ performs _predictive AI
 from small models_ and handles tasks like optimization and regression.
 As shown here, tiny AI can be remarkable effective, yet simple to
 code, and need only a few dozen labeled examples for training.
