@@ -1,6 +1,6 @@
 # A Tiny AI Minifesto
 
-<img src="docs/ezr.png" align=righ width=400>
+<img src="docs/ezr.png" align=right width=400>
 
 Recently, AI has gotten very complicated.  The models themselves
 are opaque and  hard to understand or audit or repair.  The CPU
@@ -274,6 +274,9 @@ theoretical background.
 
 | Year     | What                     | Who / System         | Notes                                                                                   |
 |----------|--------------------------|-----------------------|-----------------------------------------------------------------------------------------|
+
+| 130  |                         | Ptolemy (100-170)  | "We consider it a good principle to explain the phenomena by the simplest hypothesis possible."|
+| 1300 | Occam's Razor            | William of Occam (1287-1347) | "Entities must not be multiplied beyond necessity." |
 | 1902     | PCA                      | Pearson  [^pca]             | Larger matrices can be projected down to a few components.                                           |
 | 1960s    | Narrows         | Amarel [^amarel]      | Search can be guided by tiny sets of key variable settings.                              |
 | 1974     | Prototypes| Chang [^chang74] | Nearest neighbor reasoning is quicker after discarding 90% of the data and keeping  only the best exemplars.  |
