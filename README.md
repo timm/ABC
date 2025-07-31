@@ -208,6 +208,9 @@ Explore some, not all. Chen vs Golding mutation.
 
 Why so few labels: human labelling.
 
+pareto reasoning (evlutionary programming). too many labels. also, a strange effect super sampling gen1 does as well as reasonign owards.
+
+
 Active elarning xplore, explort, adaptive
 
 
