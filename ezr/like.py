@@ -13,7 +13,7 @@ lite.py, lightweight multi objective.
     -m  m=2             bayes low frequency hack  
     -p  p=2             distance co-effecient
     -s  seed=1234567891 random number seed   
-    -f  file=../moot/optimize/misc/auto93.csv  data file 
+    -f  file=../../moot/optimize/misc/auto93.csv  data file 
       
     -h                  show help   
     --all               run all examples.   
@@ -271,7 +271,7 @@ def eg__likely():
   rxs  = dict(klass=Num(),xploit=Num(),xplor=Num(),adapt=Num())
   for acq,log in rxs.items():
     the.acq = acq
-    adds((disty(data, likely(data)[0]) for _ in range(3)), log)
+    adds((disty(data, likely(data)[0]) for _ in range(20)), log)
   zero=rxs["klass"]
   print(*map(win,[zero.mu] + [log.mu for s,log in rxs.items() if s != "klass"]),
         the.file)

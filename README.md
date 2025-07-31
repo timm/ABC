@@ -105,39 +105,46 @@ setting impacts performance is daunting.
 When manual reasoning fails, we can ask AI to help.  Imagine we
 have a log of 800+ configurations, each showing the measured effects
 of settings to dozens of control settings (shown here as x1,x2,x3...).
-Some settings lead to excellent results:
+Some settings lead to excellent results (which we have marked
+with "best") and some do not (see the "rest").
 
 ```
 choices                     Effects
 ----------------            -----------------------
-x1,x2,x3...   →            Energy-, time-,  cpu-
+x1,x2,x3,x4,x4,x5,...  →  Energy-,    time-,  cpu-
 0,0,0,0,1,0,...               6.6,    248.4,   2.1   ← best
+0,1,1,0,1,0,...               6.6,    250,     2.0   <- best
+0,1,0,1,1,1,...              14.7,    510.8,  13.0   <- rest
 1,1,0,1,1,1,...              16.8,    518.6,  14.1   ← rest
 ...
 ```
 
 We say the better examples are those that are "closer to heaven";
 i.e.  if each example achieves goals $g1,g2,...$; and the best
-values ever seen for  each goal is $n1,n2,..$; then distance to
+values ever seen for  each goal is $n1,n2,..$; then the $d_y$ distance to
 heaven is the Euclidean distance to the best values:
 
-$$y= \sqrt{\left(\sum_i N(abs(g_i-n_i))^2\right) / len(goals)}$$
+$$d_y= \sqrt{\left(\sum_i N(abs(g_i-n_i))^2\right) / len(goals)}$$
 
 where `N` normalizes our goals values min..max as 0..1  The closer to heaven,
-the better the example so we say _smaller_ $y$ values are _better_.
+the better the example so we say _smaller_ $h$ values are _better_.
  To simplify the reporting, we define _optimal_ to
-be the labeled example that is closest to heaven (i.e. has the smallest $y$ values).
-If $\hat{y}$ is the mean $y$ of all the rows, and $y_0$ comes from the optimal
-row, and our optimizer returns a row with a  score $y_1$ then the  _win_
+be the labeled example that is closest to heaven (i.e. has the smallest $d_y$ values).
+If $\hat{d_y}$ is the mean $d_y$ of all the rows, and $d_{h}^0$ comes from the optimal
+row, and our optimizer returns a row with a  score $d_h^1$ then the  _win_
 of that estimation is the normalized distance from mean to best:
 
-$$win = 100\left(1- \frac{y_1 - y_0}{\hat{y}-y_0}\right)$$
+$$win = 100\left(1- \frac{d_h^1 - d_y^0}{\hat{d_y}-d_y^0}\right)$$
 
 Note that a win of 100 means "we have reached the optimal" and a win less than 0 means
 an optimization failure (since we are finding solutions worse than before.
 
-Using $y$, a list of examples seen-so-far can be sorted into
-a small "best" set and a larger "rest" set.
+Using $d_y$, a list of examples seen-so-far can be sorted into
+a small "best" set and a larger "rest" set. For example,  the four rows
+shown above are sorted by $d_y$. Note the fast and energy efficient rows
+appear on top while the slower, energy hungry, rows appear below.
+
+
 Any number of AI tools could learn what separates “best” from “rest.”
 But here's the challenge: **labeling** each configuration (e.g.,
 by running all the benchmarks for all possible configurations) is
@@ -171,8 +178,8 @@ in this tree, all the things above it have to be true).
     |  |  if detailed_logging == 1
     |  |  |  if no_write_delay == 0; <== win=98%
     
-These four conditions select rows that very clone
-(98%) to  optimal.
+These four conditions select rows that are very close
+(98%) to  the optimal.
 
 Note that this branch only mentions four
 options, and two of those are all about what to turn off. That
@@ -180,13 +187,48 @@ is to say, even though this databased has dozens of configuration
 options, there are two bad things to avoid and only two most
 important thing to enable  (_memory\_tables_ and _detailed\_logging_).
 
-Of course, if you ever show a result like this to a subject
+EZR shows that with the right strategy, a handful of examples 
+(in this case, 24) can
+uncover nearly all the signal.  All of this took just a few dozen
+queries—and a few hundred lines of code. It’s a striking illustration
+of the Pareto principle:  **most of the value often comes from just
+a small fraction of the effort**.
+
+Another thing to note here is the runtime speed. This data set 
+(SS-M from moot/optimize/config) has 862 rows,  3 goals and 17 control settings.
+The tree containing the branch shown above took .02 seconds to generate. By way of
+reference, just loading the python code and the data (with no subsequent inference)
+takes 0.01 seconds. XXXX
+
+### Threats to Validity
+
+Explore some, not all. Chen vs Golding mutation.
+
+Why so few labels: human labelling.
+
+Active elarning xplore, explort, adaptive
+
+
+Distance cacls: cheyshev vs distance to heaven.
+
+Comapring emans not central entancies and their variabilist
+
+results many aths not explored. eg. we apply model  dist, nayes etc. tree is better.
+
+
+### Aside 1: What to Change?
+
+In our experience, if you ever show a result like this to a subject
 matter expert, they will  push back. For example, they might demand
-to know what happens when `crypt_blowfish` is enabled. Blowfish in
+to know what happens when `crypt_blowfish` is enabled.
+
+(Just to explain: Blowfish is a
 password hashing scheme.  It makes password protection slower but
 it also  increases the computational effort required for attackers
-to  brute-force attack the database's security.  The full tree
-generted by EZR shows what happens this feature is enabled.
+to  brute-force attack the database's security.)
+
+The full tree
+generated by EZR shows what happens this feature is enabled.
 (see the last two lines).
 Note
 all the negative "wins" which is to say, if your goals are fast
@@ -204,18 +246,64 @@ runtimes, do not `crypt_blowfish`.
          7 -165    if crypt_blowfish == 1
          4  -51    |  if memory_tables == 1;
 
-(Aside: of course if security is an important goal then (a) add a
-"security+" column to the training data shown above; (b)  re-un
-EZR; (c) check what are the mpracts of that additional goal.)
+### Aside 2: Run, re-run
 
-EZR shows that with the right strategy, a handful of examples 
-(in this case, 24) can
-uncover nearly all the signal.  All of this took just a few dozen
-queries—and a few hundred lines of code. It’s a striking illustration
-of the Pareto principle:  **most of the value often comes from just
-a small fraction of the effort**.
+In our experience, when subject matter experts discuss
+these trees, it tends to surface other requirements. 
+For example, a discussion about "should we use Blowfish?" rapidly
+becomes "just how much do we value security in this application?".
+
+For such interactive discussions, one advantage of EZR is its
+runtime speed. 
+Suppose, during a requirements discussion,
+an new ``security+'' column was added into EZR's input data 
+that (say) counted the number of enabled
+controls settings with security implications. 
+Results from a  new
+"security-aware" run of 
+EZR could then be ready for discussion in a few seconds.
+
+## Theory
+
+This paper is mostly about the EZR code base.
+But before looking at the code, it is be insightful to understand its
+theoretical background.
 
 
+| Year     | What                     | Who / System         | Notes                                                                                   |
+|----------|--------------------------|-----------------------|-----------------------------------------------------------------------------------------|
+| 1902     | PCA                      | Pearson  [^pca]             | Larger matrices can be projected down to a few components.                                           |
+| 1960s    | Narrows         | Amarel [^amarel]      | Search can be guided by tiny sets of key variable settings.                              |
+| 1974     | Prototypes| Chang [^chang74] | Nearest neighbor reasoning is quicker after discarding 90% of the data and keeping  only the best exemplars.  |
+| 1980s    | ATMS       | de Kleer              | Diagnoses is quicker when it focus only on the core assumptions that do not depend on other assumptions. |
+| 1984     | Distance-Preseration | Johnson and Lindenstrauss [^john84] | High-dimensional data can be embedded in low dimensions while preserving pairwise distances. |
+| 1996     | ISAMP                    | Crawford & Baker [^crawford] | Best solutions lie is small parts of search space. Fast random tries and frequent retries is fast way to explore that space. |
+| 1997     | Feature Subset Selection | John & Kohavi [^kohavi97] | Up to 80% of features can be ignored without hurting accuracy.                          |
+| 2002     | Backdoors                | Williams et al. [^backdoor] | Setting a few variables beforehand reduces exponential runtimes to polynomial.                     |
+| 2005     | Semi-Supervised Learning | Zhou et al. [^zh05]   | Data often lies on low-dimensional manifolds inside high-dimensional spaces.            |
+| 2008     | Exemplars                | Menzies [^me08a]      | Small samples can summarize and model large datasets.                                   |
+| 2009     | Active Learning          | Settles [^settles09]  | Best results come from learners reflecting on their own models to select their own training examples. |
+| 2005–20  | Key Vars in SE           | Menzies et al. [^me03a] [^me07a]  [^me21a]     | Dozens of SE models are controlled by just a few parameters.                                |
+| 2010+    | Surrogate Models         | Various [^zul13] [^guo13]              | Optimizers can be approximated from small training sets.                                |
+| 2020s    | Model Distillation       | Various    [^shi21] [^yang24]          | Large AI models can be reduced in size by orders of magnitude, with little performance loss.    |
+
+[^pca]:  Pearson, K. (1901). "On Lines and Planes of Closest Fit
+to Systems of Points in Space". Philosophical Magazine. 2 (11):
+559–572. 10.1080/14786440109462720.
+
+[^zul13]: Zuluaga, M., Sergent, G., Krause, A., & Püschel, M. (2013, February). Active learning for multi-objective optimization. In International conference on machine learning (pp. 462-470). PMLR.
+
+[^guo13]: Guo, J., Czarnecki, K., Apel, S., Siegmund, N., & Wąsowski, A. (2013, November). Variability-aware performance prediction: A statistical learning approach. In 2013 28th IEEE/ACM International Conference on Automated Software Engineering (ASE) (pp. 301-311). IEEE.
+
+[^yang24]: Yang, Chuanpeng, Yao Zhu, Wang Lu, Yidong Wang, Qian Chen, Chenlong Gao, Bingjie Yan, and Yiqiang Chen. "Survey on knowledge distillation for large language models: methods, evaluation, and application." ACM Transactions on Intelligent Systems and Technology (2024).
+
+[^sh21]: Shi, J., Yang, Z., Xu, B., Kang, H. J., & Lo, D. (2022, October). Compressing pre-trained models of code into 3 mb. In Proceedings of the 37th IEEE/ACM International Conference on Automated Software Engineering (pp. 1-12).
+
+[^me03a]: Menzies, T., & Hu, Y. (2003). Data mining for very busy people. Computer, 36(11), 22-29.
+
+[^me07a]: Menzies, T., Owen, D., & Richardson, J. (2007). The strangest thing about software. Computer, 40(1), 54-60.
+
+[^me21a]: Menzies, T. (2021). Shockingly Simple:" Keys" for Better AI for SE. IEEE Software, 38(2), 114-118.
 
 ## Simp
 is only true for generative AI. For predictive AI, as shown here,
