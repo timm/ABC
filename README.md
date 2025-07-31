@@ -3,7 +3,7 @@ are opaque and  hard to understand or audit or repair.  The CPU
 required to build and use them severely limits experimentation. It
 also complicates industrial deployment and teaching.
 
-But are all problems intherently complex and need, say, generative
+But are all problems inherently complex and need, say, generative
 AI and large language models?  _Tiny AI_ performs _predictive AI
 from small models_ and handles tasks like optimization and regression.
 As shown here, tiny AI can be remarkable effective, yet simple to
@@ -16,22 +16,6 @@ compared LLMs to other approaches. This is a methodological error
 since other methods can produce results that are better and/or
 faster (See Table 1)
 
-Perhaps the reason Tiny AI is ignored is that there is no simpel
-reference package, nor documentation of its effectiveness.  To
-remedy that, we offer the EZR python paclage, accessible via
-
-     pip install ezr
-
-EZR is very short (a few hundred lines of Python; no use of complex
-packages like pandas or scikit-learn). We offer it here as
-
-- A useful tool for teaching AI and SE and scripting;
-- A productive tool for conducting state of the art resaerch. 
-- A criticism of other work that has never checked complicated a simple idea; 
-
-For an example where this tool can dramatically simplfy prior resutls, see the end of this document.
-
-[^hou24]: Hou, X., Zhao, Y., Liu, Y., Yang, Z., Wang, K., Li, L., ... & Wang, H. (2024). Large language models for software engineering: A systematic literature review. ACM Transactions on Software Engineering and Methodology, 33(8), 1-79.
 
 > Table1: Predictive AI can sometimes produce better results, faster.
 
@@ -43,8 +27,42 @@ For an example where this tool can dramatically simplfy prior resutls, see the e
 |2022 [^tawosi23] | Predictive AI did better for management for agile software development. |
 |2018 [^maju18] | Simple clustering plus predictive AI did better for text mining. | 
 |2024 [^ling24] | Predicve AI did better for data synthesis. |
-| 2024 [^john24] | Long list of errors seen in generataive AI for softwaer engineering. |
+| 2024 [^john24] | Long list of errors seen in generataive AI for software engineering. |
 
+Perhaps the reason Tiny AI is ignored is that there is no smple
+reference package, nor documentation of its effectiveness.  To
+remedy that, we offer the EZR python paclage, accessible via
+
+     pip install ezr
+
+EZR is very short (a few hundred lines of Python; no use of complex
+packages like pandas or scikit-learn). 
+EZR has been tested on over  100 example problems from the
+recent search-based SE literature [^moot].  Those problems are as varied
+as minimizing cost, defects, and development time while maximizing
+functionality; tuning data‑miner settings like the number of trees
+in a random forest; predicting open‑source project health; and
+optimizing software projects or cloud configurations. Beyond software
+engineering, these problems also including selecting football teams, retraining
+employees, reducing school dropouts, approving loans, predicting life
+expectancy or disease spread, designing cars, choosing wines, and even
+planning winning ad campaigns. 
+
+Across all the problems, EZR usually performs
+very well at finding good solutions
+after sampling just a few dozen examples.
+ We offer it here as
+
+- A useful tool for teaching AI and SE and scripting;
+- A productive tool for conducting state of the art resaerch. 
+- A criticism of other work that has never checked complicated a simple idea; 
+
+
+For an example where this tool can dramatically simplfy prior resutls, see the end of this document.
+
+[^moot]: http://github.com/timm/moot
+
+[^hou24]: Hou, X., Zhao, Y., Liu, Y., Yang, Z., Wang, K., Li, L., ... & Wang, H. (2024). Large language models for software engineering: A systematic literature review. ACM Transactions on Software Engineering and Methodology, 33(8), 1-79.
 [^john24]: Johnson, B., & Menzies, T. (2024). Ai over-hype: A dangerous threat (and how to fix it). IEEE Software, 41(6), 131-138.
 
 [^ling24]: Ling, X., Menzies, T., Hazard, C., Shu, J., & Beel, J. (2024). Trading off scalability, privacy, and performance in data synthesis. IEEE Access, 12, 26642-26654.
@@ -61,7 +79,7 @@ study,” IEEE Transactions on Software Engineering, vol. 49, no. 4,
 pp. 2677– 2697, 2023.
 
 
-
+## Simp
 is only true for generative AI. For predictive AI, as shown here,
 
 This code implements an AI agent explaining what they found as they
