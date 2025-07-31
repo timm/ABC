@@ -121,12 +121,14 @@ x1,x2,x3,x4,x4,x5,...  →  Energy-,    time-,  cpu-
 Note the "best" fast and energy efficient rows
 appear on top (while the "rest" are slower and more energy hungry).
 
-We say the better examples are those that are "closer to heaven";
-i.e.  if each example achieves goals $g1,g2,...$; and the best
-values ever seen for  each goal is $n1,n2,..$; then the $d_y$ distance to
-heaven is the Euclidean distance to the best values:
+We say the better examples are those that are "closer to heaven".
+Say each example achieves goals $g1,g2,...$ which we want to minimize, maximize,... (respectively).
+Let the  $most_i$ 
+of goal $g_i$ be 0,1 (for minimize, maximize). The distance to heaven $d_y$ of a row
+is 
+the Euclidean distance to the best values:
 
-$$d_y= \sqrt{\left(\sum_i N(abs(g_i-n_i))^2\right) / len(goals)}$$
+$$d_y= \sqrt{\left(\sum_i abs(N(g_i)-most_i)^2\right) / len(goals)}$$
 
 where `N` normalizes our goals values min..max as 0..1  The closer to heaven,
 the better the example so we say _smaller_ $h$ values are _better_.
@@ -208,6 +210,7 @@ Why so few labels: human labelling.
 
 pareto reasoning (evlutionary programming). too many labels. also, a strange effect super sampling gen1 does as well as reasonign owards.
 
+aside chen evaluation
 
 Active elarning xplore, explort, adaptive
 
