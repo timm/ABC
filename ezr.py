@@ -3,25 +3,28 @@
 lite.py, lightweight multi objective.   
 (col) 2025, Tim Menzies <timm@ieee.org>, MIT license   
    
-     -a  acq=klass       acquisition function   
-     -A  Any=4           on init, how many initial guesses?   
-     -B  Build=24        when growing theory, how many labels?   
-     -C  Check=5         when testing, how many checks?   
-     -F  Few=128         sample size of data random sampling  
-     -b  bins=7          number of bins   
-     -k  k=1             bayes low frequency hack  
-     -m  m=2             bayes low frequency hack  
-     -p  p=2             distance co-effecient
-     -s  seed=1234567891 random number seed   
-     -f  file=../moot/optimize/misc/auto93.csv  data file 
-       
-     -h                  show help   
-     --all               run all examples.   
-"""
-from types import SimpleNamespace as o
+    -a  acq=klass       acquisition function   
+    -A  Any=4           on init, how many initial guesses?   
+    -B  Build=24        when growing theory, how many labels?   
+    -C  Check=5         when testing, how many checks?   
+    -F  Few=128         sample size of data random sampling  
+    -b  bins=7          number of bins   
+    -k  k=1             bayes low frequency hack  
+    -m  m=2             bayes low frequency hack  
+    -p  p=2             distance co-effecient
+    -s  seed=1234567891 random number seed   
+    -f  file=../moot/optimize/misc/auto93.csv  data file 
+      
+    -h                  show help   
+    --all               run all examples.   
+    --list              list all examples"""
 import random, math, sys, re
+from typing import Any, Callable, Iterator, List
 
-def atom(s:str) -> int|float|str|bool:
+Atom = int|float|str|bool
+Row  = List[Atom]
+
+def atom(s:str) -> Atom:
   "string coerce"
   for fn in [int,float]:
     try: return fn(s)
@@ -29,7 +32,7 @@ def atom(s:str) -> int|float|str|bool:
   s = s.strip()
   return {'True':True,'False':False}.get(s,s)
 
-Row=list[atom]
+from types import SimpleNamespace as o
 the = o(**{k:atom(v) for k,v in re.findall(r"(\w+)=(\S+)",__doc__)})
 
 #--------------------------------------------------------------------
@@ -42,12 +45,12 @@ def Num(at=0, txt=" ") -> o:
   return o(it=Num, at=at, txt=txt, lo=1e32, mu=0, m2=0, sd=0, n=0, 
            hi=-1e32, more = 0 if txt[-1] == "-" else 1)
 
-def Data(src:iter) -> o:
+def Data(src) -> o:
   "store rows, summarized in cols"
   src = iter(src)
   return adds(src, o(it=Data, n=0, rows=[], cols= Cols(next(src))))
 
-def Cols(names: list[str]) -> o:
+def Cols(names: List[str]) -> o:
   "generate columns from column names"
   all, x, y, klass = [],[],[],None
   for c,s in enumerate(names):
@@ -62,17 +65,15 @@ def clone(data:Data, rows=None) -> o:
   return adds(rows or [], Data([data.cols.names]))
 
 #--------------------------------------------------------------------
-def adds(src:iter, it=None) ->o:
+def adds(src, it=None) -> o:
   "add many things to it, return it"
-  it = it or Num()
-  [add(it, x) for x in src]
-  return it
+  it = it or Num(); [add(it, x) for x in src]; return it
 
-def sub(x, v, zap=False): 
+def sub(x:o, v:Any, zap=False) -> Any: 
   "subtraction is just adding -1"
   return add(x,v,-1,zap)
 
-def add(x: o, v:any, inc=1, zap=False):
+def add(x: o, v:Any, inc=1, zap=False) -> Any:
   "incrementally update Syms,Nums or Datas"
   if v == "?": return v
   if x.it is Sym: x.has[v] = inc + x.has.get(v,0)
@@ -92,18 +93,19 @@ def add(x: o, v:any, inc=1, zap=False):
     elif zap: x.rows.remove(v) # slow for long rows
     [add(col, v[col.at],inc) for col in x.cols.all]
   return v
+
 #--------------------------------------------------------------------
 def dist(src) -> float:
   "general distance function"
   d,n = 0,0
-  for v in src: n,d = n+1, d + v**the.p
+  for v in src: n,d = n+1, d + v**the.p;
   return (d/n) ** (1/the.p)
 
 def disty(data:Data, row:Row) -> float:
   "distance of row to best goal values"
   return dist(abs(norm(c, row[c.at]) - c.more) for c in data.cols.y)
 
-def distysort(data,rows=None) -> list[list]:
+def distysort(data:Data,rows=None) -> List[Row]:
   "sort rows by distance to best goal values"
   return sorted(rows or data.rows, key=lambda r: disty(data,r))
 
@@ -112,22 +114,20 @@ def norm(num:Num, v:float) -> float:  # 0..1
   return  (v - num.lo) / (num.hi - num.lo + 1E-32)
 
 #--------------------------------------------------------------------
-def csv(file:str) -> list[Row]:
+def csv(file:str) -> List[Row]:
   "iterate over a file"
   with open(file,encoding="utf-8") as f:
     for line in f:
       if (line := line.split("%")[0]):
         yield [atom(s.strip()) for s in line.split(",")]
 
-def shuffle(lst: list) -> list:
+def shuffle(lst: List) -> List:
   "randomize order of list"
-  random.shuffle(lst)
-  return lst
+  random.shuffle(lst); return lst
 
-def pout(x:any) -> None: 
-  print(out(x))
+def pout(x:Any) -> None: print(out(x))
 
-def out(x:any) -> str:
+def out(x:Any) -> str:
   "pretty print anything"
   if callable(x): x= x.__name__
   if type(x) is float: x = int(x) if int(x)==float(x) else f"{x:.3f}"
@@ -143,13 +143,13 @@ def main(funs: dict[str,callable]) -> None:
       random.seed(the.seed); fn()
     else:
       for key in vars(the):
-        if arg=="-"+key[0]: the.__dict__[key] = atom(sys.argv[n+1])
+        if arg=="-"+key[0]: the.__dict__[key] = atom(sys.argv[n+1])
 
-#--------------------------------------------------------------------
-def like(i:o, v:any, prior=0) -> float :
+#--------------------------------------------------------------------
+def like(i:o, v:Any, prior=0) -> float :
   "probability of 'v' belong to the distribution in 'i'"
   if i.it is Sym:
-    tmp = ((i.has.get(v,0) + the.m*prior)
+    tmp = ((i.has.get(v,0) + the.m*prior) 
            /(sum(i.has.values())+the.m+1e-32))
   else:
     var = 2 * i.sd * i.sd + 1E-32
@@ -159,9 +159,8 @@ def like(i:o, v:any, prior=0) -> float :
 
 def likes(data:Data, row:Row, nall=100, nh=2) -> float:
   "How much does this DATA like row?"
-  prior = (data.n + the.k) / (nall + the.k*nh)
-  tmp = [like(col,v,prior) 
-         for col in data.cols.x if (v:=row[col.at]) != "?"]
+  prior= (data.n + the.k) / (nall + the.k*nh)
+  tmp= [like(c,v,prior) for c in data.cols.x if (v:=row[c.at]) != "?"]
   return sum(math.log(n) for n in tmp + [prior] if n>0)    
 
 def likely1(best:Data, rest:Data, x:Data) -> Row:
@@ -187,7 +186,7 @@ def likelier(best:Data, rest:Data, x:Data) -> Row:
   x.rows = lst[:the.Few] + x.rows[the.Few*2:] + lst[the.Few:] 
   return first
 
-def likely(data:Data, rows=None) -> list[Row]:
+def likely(data:Data, rows=None) -> List[Row]:
   """x,xy = rows with 'x' and 'xy' knowledge.
   Find the thing in x most likely to be best. Add to xy. Repeat."""
   rows = rows or data.rows
@@ -238,15 +237,18 @@ def eg__Num() :
   assert 0.13 == round(like(n,10.5),2)
 
 def eg__data():
+  "check we can read csv files from disk"
   assert 3009.84 == round(sum(y.mu for y in 
                               Data(csv(the.file)).cols.y),2)
 
 def eg__bayes():
+  "like: check we can find row likelihoods"
   data = Data(csv(the.file))
   assert all(-30 <= likes(data,t) <= 0 for t in data.rows)
   print(sorted([round(likes(data,t),2) for t in data.rows])[::20])
 
 def eg__inc():
+  "like: check we can incremental add and remove data"
   d1 = Data(csv(the.file))
   d2 = clone(d1)
   x  = d2.cols.x[1]
@@ -261,6 +263,7 @@ def eg__inc():
     sub(d2,row,zap=True)
 
 def eg__likely():
+  "like: try different acqusition functions"
   data = Data(csv(the.file))
   b4   = adds(disty(data,r) for r in data.rows)
   R    = lambda n: int(100*n)
@@ -270,15 +273,20 @@ def eg__likely():
     the.acq = acq
     adds((disty(data, likely(data)[0]) for _ in range(3)), log)
   zero=rxs["klass"]
-  print(*map(win,[zero.mu] + [log.mu
-                         for acq,log in rxs.items() if acq != "klass"]),
+  print(*map(win,[zero.mu] + [log.mu for s,log in rxs.items() if s != "klass"]),
         the.file)
 
 def eg__all(): 
+ "run all examples"
  for s,fn in globals().items():
    if s != "eg__all" and s.startswith("eg_"): 
      print(f"\n--| {s} |--------------"); random.seed(the.seed); fn()
 
+def eg__list():
+  "list all examples"
+  print("\npython3 ezr.py [OPTIONS]\n")
+  for s, fn in globals().items():
+    if s.startswith("eg_"): 
+      print(f"\t{s[2:].replace('_','-'):10} {fn.__doc__}")
 
-#--------------------------------------------------------------------
 if __name__ == "__main__": main(globals())
