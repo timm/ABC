@@ -146,10 +146,10 @@ with minimal effort?
 
 To handle that challenge,  EZR uses a minimalist A–B–C strategy:
 
-- *A=Any*; i.e. "ask anything".
+- **A=Any**; i.e. "ask anything".
   Randomly label a few examples (say, _A = 4_) to seed the process.
 
-- *B=Build*; i.e.  build a model**
+- **B=Build**; i.e.  build a model.
   In this phase, we build separate models for “best” and “rest,” then label up to,
   say _B = 24_ more rows by picking the unlabeled row that maximizes
   the score _b/r_ (where `b` and `r` are likelihoods that a row
