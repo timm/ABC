@@ -127,11 +127,11 @@ where `N` normalizes our goals values 0..1. The closer to heaven,
 the better the example so we say _smaller_ $y$ values are _better_.
  To simplify the reporting, we define _optimal_ to
 be the labeled example that is closest to heaven (i.e. has the smallest $y$ values).
-If $\hat{y}$ is the mean $y$ of all the rows, and _y_0_ comes from the optimal
+If $\hat{y}$ is the mean $y$ of all the rows, and $y_0$ comes from the optimal
 row, and our optimizer returns a row with a  score $y_1$ then the _win_
 of that estimation is
 
-$$win = 100(1- \frac{y_1 - y_0}{\hat{y}=y_0})$$
+$$win = 100\left(1- \frac{y_1 - y_0}{\hat{y}=y_0}\right)$$
 
 Note that a win of 100% means "we have reached the optimal" and win less than 0 means
 an optimization failure (since we are finding solutions worse than before.
