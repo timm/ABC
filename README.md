@@ -24,10 +24,10 @@ faster (See Table 1)
 
 |When          | What|
 |--------------|-----|
+|2018 [^maju18] | Simple clustering plus predictive AI did better for text mining. | 
 |2022 [^grin22] | Large language models may not be the best choice for tabular data. |
 |2024 [^somv24] | Ditto |
 |2022 [^taw23] | Predictive AI did better for management for agile software development. |
-|2018 [^maju18] | Simple clustering plus predictive AI did better for text mining. | 
 |2024 [^ling24] | Predictive AI did better for data synthesis. |
 | 2024 [^john24] | Long list of errors seen in generative AI for software engineering. |
 
@@ -40,16 +40,15 @@ remedy that, we offer a free open source Tiny AI  python package, accessible via
 EZR is an explanation system for incremental multi-objective
 optimization.  This tool sorts and splits the examples seen so far
 into two lists: a small "best" list and the remaining "rest".  New
-examples are explored if they are more likely to be best than rest.
+examples are explored if they are more likely to be "best" than "rest".
 The most preferred example then updates "best" and "rest" and the
 cycle repeats.  At runtime, EZR avoids data that is noisy (i.e.
-is clearly not "best" or "rest") and  superfluous  (i.e. is not not
-relevant for "better" behavior). In this way it ignores most of the
+is clearly not "best" or "rest") and  superfluous  (i.e. that is not
+relevant for "better" behavior). In this way EZR ignores most of the
 data and builds its models using just a few dozens samples. Hence,
-a regression tree learned from these examples offers a tiny explanation
+a regression tree learned from these examples offers a tiny and simple explanation
 of how to achieve good results (and  also what to do to improve
 those results).
-
 
 EZR is very short (a few hundred lines of Python; no use of complex
 packages like pandas or scikit-learn). 
@@ -93,6 +92,129 @@ For an example where this tool can dramatically simplify prior results, see the 
 estimation: Have we solved the problem yet? insights from a replication
 study,” IEEE Transactions on Software Engineering, vol. 49, no. 4,
 pp. 2677– 2697, 2023.
+
+## A Quick Example
+
+Just to give this work some context, here’s a concrete case.
+
+Say we want to configure a database to reduce energy use, runtime,
+and CPU load. The system exposes dozens of tuning knobs—storage,
+logging, locking, encryption, and more. Understanding how each
+setting impacts performance is daunting.
+
+When manual reasoning fails, we can ask AI to help.  Imagine we
+have a log of 800+ configurations, each showing the measured effects
+of settings to dozens of control settings (shown here as x1,x2,x3...).
+Some settings lead to excellent results:
+
+```
+choices                     Effects
+----------------            -----------------------
+x1,x2,x3...   →            Energy-, time-,  cpu-
+0,0,0,0,1,0,...               6.6,    248.4,   2.1   ← best
+1,1,0,1,1,1,...              16.8,    518.6,  14.1   ← rest
+...
+```
+
+We say the better examples are those that are "closer to heaven";
+i.e.  if each example achieves goals $g1,g2,...$; and the best
+values ever seen for  each goal is $n1,n2,..$; then distance to
+heaven is
+
+$$y= \sum_i(N(abs(g_i-n_i))^2) / len(goals)$$
+
+where `N` normalizes our goals values 0..1. The closer to heaven,
+the better the example so we say _smaller_ $y$ values are _better_.
+ To simplify the reporting, we define _optimal_ to
+be the labeled example that is closest to heaven (i.e. has the smallest $y$ values).
+If $\hat{y}$ is the mean $y$ of all the rows, and _y_0_ comes from the optimal
+row, and our optimizer returns a row with a  score $y_1$ then the _win_
+of that estimation is
+
+$$win = 100(1- \frac{y_1 - y_0}{\hat{y}=y_0})$$
+
+Note that a win of 100% means "we have reached the optimal" and win less than 0 means
+an optimization failure (since we are finding solutions worse than before.
+
+Using $y$, a list of examples seen-so-far can be sorted into
+a small "best" set and a larger "rest" set.
+Any number of AI tools could learn what separates “best” from “rest.”
+But here's the challenge: **labeling** each configuration (e.g.,
+by running all the benchmarks for all possible configurations) is
+expensive. So the EZR challenge is how to learn an effective model
+with minimal effort?
+
+To handle that challenge,  EZR uses a minimalist A–B–C strategy:
+
+- **A=Any**; i.e. "ask anything".
+  Randomly label a few examples (say, _A = 4_) to seed the process.
+
+- **B=Build**; i.e.  build a model**
+  In this phase, we build separate models for “best” and “rest,” then label up to,
+  say _B = 24_ more rows by picking the unlabeled row that maximizes
+  the score _b/r_ (where `b` and `r` are likelihoods that a row
+  belongs to the "best" and "rest" models).
+
+- **C=Check**; i.e. check the model.
+  Apply the learned model to unlabeled data and to select a small
+  set (e.g., _C=5_) of the most promising rows. After labeling
+  those rows, return the best one.
+
+In this task, after labeling just 24 out of 800 rows (∼3%), EZR
+constructs a binary regression tree from those 24 examples. In that
+tree, left and right branches go best and worse examples. The
+left-most branch of that tree is shown here (and to get to any line
+in this tree, all the things above it have to be true).
+
+    if crypt_blowfish == 0
+    |  if memory_tables == 1
+    |  |  if detailed_logging == 1
+    |  |  |  if no_write_delay == 0; <== win=98%
+    
+These four conditions select rows that very clone
+(98%) to  optimal.
+
+Note that this branch only mentions four
+options, and two of those are all about what to turn off. That
+is to say, even though this databased has dozens of configuration
+options, there are two bad things to avoid and only two most
+important thing to enable  (_memory\_tables_ and _detailed\_logging_).
+
+Of course, if you ever show a result like this to a subject
+matter expert, they will  push back. For example, they might demand
+to know what happens when `crypt_blowfish` is enabled. Blowfish in
+password hashing scheme.  It makes password protection slower but
+it also  increases the computational effort required for attackers
+to  brute-force attack the database's security.  The full tree
+generted by EZR shows what happens this feature is enabled.
+(see the last two lines).
+Note
+all the negative "wins" which is to say, if your goals are fast
+runtimes, do not `crypt_blowfish`.
+
+     #rows  win
+        17   68    if crypt_blowfish == 0
+         7   94    |  if memory_tables == 1
+         5   97    |  |  if detailed_logging == 1
+         4   98    |  |  |  if no_write_delay == 0;
+        10   49    |  if memory_tables == 0
+         7   51    |  |  if encryption == 0
+         5   50    |  |  |  if no_write_delay == 1
+         4   50    |  |  |  |  if txc_mvlocks == 0;
+         7 -165    if crypt_blowfish == 1
+         4  -51    |  if memory_tables == 1;
+
+(Aside: of course if security is an important goal then (a) add a
+"security+" column to the training data shown above; (b)  re-un
+EZR; (c) check what are the mpracts of that additional goal.)
+
+EZR shows that with the right strategy, a handful of examples 
+(in this case, 24) can
+uncover nearly all the signal.  All of this took just a few dozen
+queries—and a few hundred lines of code. It’s a striking illustration
+of the Pareto principle:  **most of the value often comes from just
+a small fraction of the effort**.
+
 
 
 ## Simp
