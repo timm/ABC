@@ -296,6 +296,19 @@ theoretical background.
 to Systems of Points in Space". Philosophical Magazine. 2 (11):
 559–572. 10.1080/14786440109462720.
 
+[^amarel]: S. Amarel, “Program synthesis as a theory formation task:
+problem representations and solution methods,” in Machine Learning:
+An Artificial Intelligence Approach. Morgan Kaufmann, 1986.
+
+[^backdoor]: R. Williams, C. P. Gomes, and B. Selman, “Backdoors
+to typical case complexity,” in Proceedings of the International
+Joint Conference on Artificial Intelligence, 2003.
+
+[^chang74]: Chang, C. L. (1974). Finding Prototypes for Nearest Neighbor Classifiers. IEEE Transactions on Computers, C-23(11), 1179–1184.--
+
+
+
+
 [^zul13]: Zuluaga, M., Sergent, G., Krause, A., & Püschel, M. (2013, February). Active learning for multi-objective optimization. In International conference on machine learning (pp. 462-470). PMLR.
 
 [^guo13]: Guo, J., Czarnecki, K., Apel, S., Siegmund, N., & Wąsowski, A. (2013, November). Variability-aware performance prediction: A statistical learning approach. In 2013 28th IEEE/ACM International Conference on Automated Software Engineering (ASE) (pp. 301-311). IEEE.
