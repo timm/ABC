@@ -126,7 +126,7 @@ Say each example achieves goals $g1,g2,...$ which we want to minimize, maximize,
 Let the  $most_i$ 
 of goal $g_i$ be 0,1 (for minimize, maximize). The distance to heaven $d_y$ of a row
 is 
-the Euclidean distance to the best values:
+the Euclidean distance to the $most_i$ values:
 
 $$d_y= \sqrt{\left(\sum_i abs(N(g_i)-most_i)^2\right) / len(goals)}$$
 
