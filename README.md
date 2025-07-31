@@ -1,26 +1,35 @@
-Teaching and researeching AI has gotten complcaited. 
-The models themselves are opaque and  hard to understand or audit or repair.
-The CPU required to build and use them severely
-limits experimentation.
+Recently, AI has gotten very complcaited.  The models themselves
+are opaque and  hard to understand or audit or repair.  The CPU
+required to build and use them severely limits experimentation. It
+also complicates industrial deployment and teaching.
 
-Certainly, some probems are intherently complex and need, say, generative AI and large language models.
-But not all AI is generative AI.
-_Tiny AI_ performs _predictive AI from small models_.
-As shown here,
-predictive AI can be remarkable effective, yet simple to code, and need only a few dozen
-labelled examples. to train. 
+But are all problems intherently complex and need, say, generative
+AI and large language models?  _Tiny AI_ performs _predictive AI
+from small models_ and handles tasks like optimization and regression.
+As shown here, tiny AI can be remarkable effective, yet simple to
+code, and need only a few dozen labelled examples. to train.
 
-Tiny AI methods are routinely ignored in resaerch and industry.
-In a 
-recent systematic review [^hou24] of 229 SE papers using large
+Tiny AI methods are routinely ignored in resaerch and industry.  In
+a recent systematic review [^hou24] of 229 SE papers using large
 language models (LLMs), only 13/229 (about 5%) of those papers
-compared LLMs to other approaches. This is a methodological error since other methods can produce results that are better
-and/or faster (See Table 1)
+compared LLMs to other approaches. This is a methodological error
+since other methods can produce results that are better and/or
+faster (See Table 1)
 
-Ideally researechers and practioners first try Tiny AI methods, then move to Big AI only when necessary.
-In an attempt to encourage that methodology, we offer here an example of how Tiny AI can be simple, fast, and effective. No,
-it this code will not solve all problems. But since it is so non-resource intensive, we comreccond it as a first pass.
+Perhaps the reason Tiny AI is ignored is that there is no simpel
+reference package, nor documentation of its effectiveness.  To
+remedy that, we offer the EZR python paclage, accessible via
 
+   pip install ezr
+
+EZR is very short (a few hundred lines of Python; no use of complex
+packages like pandas or scikit-learn). We offer it here as
+
+- A useful tool for teaching AI and SE and scripting;
+- A productive tool for conducting state of the art resaerch. 
+- A criticism of other work that has never checked complicated a simple idea; 
+
+For an example where this tool can dramatically simplfy prior resutls, see the end of this document.
 
 [^hou24]: Hou, X., Zhao, Y., Liu, Y., Yang, Z., Wang, K., Li, L., ... & Wang, H. (2024). Large language models for software engineering: A systematic literature review. ACM Transactions on Software Engineering and Methodology, 33(8), 1-79.
 
@@ -45,14 +54,6 @@ it this code will not solve all problems. But since it is so non-resource intens
 
 [^maju18]: Majumder, S., Balaji, N., Brey, K., Fu, W., & Menzies, T. (2018, May). 500+ times faster than deep learning: A case study exploring faster methods for text mining stackoverflow. In Proceedings of the 15th International Conference on Mining Software Repositories (pp. 554-563).
 
-
-Lest we forget the valye of predictive AI, this paper offers an example of tiny AI called EZR.
-EZR is very short (a few hundred lines).
-We offer it here as
-(a) a criticism of much other work
-that has never chec complicated a simple idea; (b) a useful tool for teaching AI and SE and scripting;
-(c) a productive tool for conducting state of the art resaerch. 
-For an example where this tool can dramatically simplfy prior resutls, see the end of this document.
 
 
 is only true for generative AI. For predictive AI, as shown here,
