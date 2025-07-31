@@ -35,18 +35,16 @@ For an example where this tool can dramatically simplfy prior resutls, see the e
 
 > Table1: Predictive AI can sometimes produce better results, faster.
 
-asdas
 
 |When          | What|
 |--------------|-----|
 |2022 [^grin22] | Large language models may not be the best choice for tabular data. |
 |2024 [^somv24] | Ditto |
-|2022 [^tawosi] | Predictive AI did better for management for agile software development. |
+|2022 [^tawosi23] | Predictive AI did better for management for agile software development. |
 |2018 [^maju18] | Simple clustering plus predictive AI did better for text mining. | 
 |2024 [^ling24] | Predicve AI did better for data synthesis. |
 | 2024 [^john24] | Long list of errors seen in generataive AI for softwaer engineering. |
 
-asd
 [^john24]: Johnson, B., & Menzies, T. (2024). Ai over-hype: A dangerous threat (and how to fix it). IEEE Software, 41(6), 131-138.
 
 [^ling24]: Ling, X., Menzies, T., Hazard, C., Shu, J., & Beel, J. (2024). Trading off scalability, privacy, and performance in data synthesis. IEEE Access, 12, 26642-26654.
