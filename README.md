@@ -90,7 +90,7 @@ For an example where this tool can dramatically simplfy prior resutls, see the e
 
 [^maju18]: Majumder, S., Balaji, N., Brey, K., Fu, W., & Menzies, T. (2018, May). 500+ times faster than deep learning: A case study exploring faster methods for text mining stackoverflow. In Proceedings of the 15th International Conference on Mining Software Repositories (pp. 554-563).
 
-[^tawo23]: V. Tawosi, R. Moussa, and F. Sarro, “Agile effort
+[^tawoi23]: V. Tawosi, R. Moussa, and F. Sarro, “Agile effort
 estimation: Have we solved the problem yet? insights from a replication
 study,” IEEE Transactions on Software Engineering, vol. 49, no. 4,
 pp. 2677– 2697, 2023.
