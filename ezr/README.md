@@ -1,12 +1,10 @@
 File imports:
 
 ```mermaid
-graph TD;
+graph LR;
 lib --> data;
 data --> dist;
 about --> lib;
-types --> lib;
-typing --> lib;
 data --> like;
 dist --> likely;
 like --> likely;
