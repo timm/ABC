@@ -20,7 +20,7 @@ push: ## commit to main
 	- git status
 
 sh: ## run my shell
-	bash --init-file  $(Top)/etc/dotbash.rc -i
+	sh $(Top)/ell
 
 lint: ## lint all python in this directory
 	export PYTHONPATH="..:$$PYTHONPATH"; \
@@ -29,7 +29,7 @@ lint: ## lint all python in this directory
 		    --disable=E701,W0108,W0106,W0718,W0201  *.py
 
 docs/%.html : %.py
-	pdoc -o docs --logo ezr.png $^ 
+	pdoc -o $(Top)/docs --logo ezr.png $^ 
 
 ~/tmp/%.pdf: %.py ## pdf print Python
 	echo "making $@"
@@ -52,7 +52,7 @@ docs/%.html : %.py
 
 lite20:
 	mkdir -p ~/tmp
-	time ls -r ../moot/optimize/*/*.csv \
+	time ls -r $(Top)/../moot/optimize/*/*.csv \
 	  | xargs -P 32 -n 1 -I{} sh -c 'python3 -B ezr.py -f "{}" --likely' \
 	  | tee ~/tmp/$@.log
 	@echo "now call make lite20report"

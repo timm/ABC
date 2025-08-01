@@ -10,6 +10,7 @@ lite.py, lightweight multi objective.
     -F  Few=128         sample size of data random sampling  
     -b  bins=7          number of bins   
     -k  k=1             bayes low frequency hack  
+    -l  leaf=3          min items in tree leaves
     -K  Ks=0.95         confidence for Kolmogorov–Smirnov test
     -m  m=2             bayes low frequency hack  
     -p  p=2             distance co-effecient
