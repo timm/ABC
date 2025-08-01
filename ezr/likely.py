@@ -1,6 +1,8 @@
 #!/usr/bin/env python3 -B
 from like import *
+from dist import *
 
+#--------------------------------------------------------------------
 def likely(data:Data, rows=None) -> List[Row]:
   """x,xy = rows with 'x' and 'xy' knowledge.
   Find the thing in x most likely to be best. Add to xy. Repeat."""
@@ -49,7 +51,7 @@ def likelier(best:Data, rest:Data, x:Data) -> Row:
   return first
 
 #--------------------------------------------------------------------
-ddef eg__bayes():
+def eg__bayes():
   "like: check we can find row likelihoods"
   data = Data(csv(the.file))
   assert all(-30 <= likes(data,t) <= 0 for t in data.rows)
