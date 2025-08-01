@@ -1,13 +1,20 @@
 #!/usr/bin/env python3 -B 
-from ezr import *
+from data import *
 
-def mids(data):
-  "Return the central tendency for each column."
-  return [mid(col) for col in data.cols.all]
+#--------------------------------------------------------------------
+def dist(src) -> float:
+  "general distance function"
+  d,n = 0,0
+  for v in src: n,d = n+1, d + v**the.p;
+  return (d/n) ** (1/the.p)
 
-def mid(col):
-  "Return the central tendnacy for one column."
-  return max(col.has, key=col.has.get) if col.it is Sym else col.mu
+def disty(data:Data, row:Row) -> float:
+  "distance of row to best goal values"
+  return dist(abs(norm(c, row[c.at]) - c.more) for c in data.cols.y)
+
+def distysort(data:Data,rows=None) -> List[Row]:
+  "sort rows by distance to best goal values"
+  return sorted(rows or data.rows, key=lambda r: disty(data,r))
 
 def distx(data, row1, row2):
   "Distance between independent values of two rows."
@@ -18,9 +25,16 @@ def distx(data, row1, row2):
     a = a if a != "?" else (0 if b>0.5 else 1)
     b = b if b != "?" else (0 if a>0.5 else 1)
     return abs(a-b)
+  return dist(_aha(col, row1[col.at], row2[col.at])  
+              for col in data.cols.x)
 
-  return dist(_aha(col, row1[col.at], row2[col.at])  for col in data.cols.x)
+def daBest(data,rows=None):
+  "find the best from rows, report its disty"
+  rows = rows or data.rows
+  Y=lambda r: disty(data,r)
+  return Y(sorted(rows, key=Y)[0])
 
+#--------------------------------------------------------------------
 def distKpp(data, rows=None, k=20, few=None):
   "Return key centroids usually separated by distance D^2."
   few = few or the.Few
@@ -86,7 +100,8 @@ def distFastermap(data,rows, sway1=False):
   return o(labels= labels,
            nolabels= [r for r in rows if r not in labels.rows])
 
-def eg__distx():
+#-------------------------------------------------------------------
+def eg__distx():
   "Dist: check x distance calcs."
   data = Data(csv(the.file))
   r1= data.rows[0]
@@ -105,11 +120,13 @@ def eg__disty():
 
 def eg__irisKpp(): 
   "Dist: check Kmeans++ centroids on iris."
-  [print(r) for r in distKpp(Data(csv("../moot/classify/iris.csv")),k=10)]
+  src = csv("../../moot/classify/iris.csv")
+  [print(r) for r in distKpp(Data(src),k=10)]
 
 def eg__irisK(): 
   "Dist: check Kmeans on iris."
-  for data in distKmeans(Data(csv("../moot/classify/iris.csv")),k=10):
+  src = csv("../../moot/classify/iris.csv")
+  for data in distKmeans(Data(src),k=10):
     print(', '.join([out(x) for x in mids(data)])) 
 
 def eg__fmap():
@@ -118,20 +135,13 @@ def eg__fmap():
   for few in [32,64,128,256,512]:
     the.Few = few
     print(few)
-    n=adds(daBest(data, distFastermap(data,data.rows).labels.rows) for _ in range(20))
+    n=adds(daBest(data, 
+             distFastermap(data,data.rows).labels.rows) 
+                for _ in range(20))
     print("\t",n.mu,n.sd)
 
-def eg__all(): 
- "run all examples"
- for s,fn in globals().items():
-   if s != "eg__all" and s.startswith("eg_"): 
-     print(f"\n--| {s} |--------------"); random.seed(the.seed); fn()
-
-def eg__list():
-  "list all examples"
-  print("\npython3 ezr.py [OPTIONS]\n")
-  for s, fn in globals().items():
-    if s.startswith("eg_"): 
-      print(f"\t{s[2:].replace('_','-'):10} {fn.__doc__}")
-
-if __name__ == "__main__": main(globals())
+#--------------------------------------------------------------------
+def eg__all()             : mainAll(globals())
+def eg__list()            : mainList(globals())
+def eg_h()                : print(helpstring)
+if __name__ == "__main__" : main(globals())
